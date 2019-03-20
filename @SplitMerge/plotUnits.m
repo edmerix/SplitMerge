@@ -28,6 +28,7 @@ function plotUnits(app)
         app.ColorCheck.Visible = 'on';
         app.UnitsPanel.Visible = 'on';
         app.RecalcButton.Visible = 'on';
+        app.AggCutoff.Visible = 'on';
 
         % populate all the spike panels here
         margin = 0;%0.01 * app.UnitsPanel.Position(3); % 1%

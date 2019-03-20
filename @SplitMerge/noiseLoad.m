@@ -97,6 +97,13 @@ function noiseLoad(app,~)
         app.NoisePanels.CutNoise.Position(4) = 30;
         app.NoisePanels.CutNoise.Text = 'Remove noise and re-calculate clusters';
         
+        app.NoisePanels.PowerSpec.Visible = 'on';
+        app.NoisePanels.Waveforms.Visible = 'on';
+        app.NoisePanels.PowerSlider.Visible = 'on';
+        app.NoisePanels.FreqSlider(1).Visible = 'on';
+        app.NoisePanels.FreqSlider(2).Visible = 'on';
+        app.NoisePanels.CutNoise.Visible = 'on';
+        
         app.Data.modified(6) = 0;
         close(app.Data.loader);
         app.Data.loader = [];

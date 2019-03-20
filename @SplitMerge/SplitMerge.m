@@ -235,6 +235,7 @@ classdef SplitMerge < matlab.apps.AppBase
             % Create agg_cutoff value
             app.AggCutoff = uispinner(app.TabMerge);
             app.AggCutoff.ValueDisplayFormat = 'AggCutoff: %.2f';
+            app.AggCutoff.Visible = 'off';
             app.AggCutoff.Step = 0.01;
             
             % Create RecalcButton
@@ -374,16 +375,22 @@ classdef SplitMerge < matlab.apps.AppBase
             app.NoisePanels.PowerSlider = uislider(app.TabNoise);
             app.NoisePanels.FreqSlider(1) = uislider(app.TabNoise);
             app.NoisePanels.FreqSlider(2) = uislider(app.TabNoise);
-
+            app.NoisePanels.CutNoise = uibutton(app.TabNoise, 'push');
+            
+            app.NoisePanels.PowerSpec.Visible = 'off';
+            app.NoisePanels.Waveforms.Visible = 'off';
+            app.NoisePanels.PowerSlider.Visible = 'off';
+            app.NoisePanels.FreqSlider(1).Visible = 'off';
+            app.NoisePanels.FreqSlider(2).Visible = 'off';
+            app.NoisePanels.CutNoise.Visible = 'off';
+            
             app.NoisePanels.PowerSlider.ValueChangedFcn = createCallbackFcn(app, @noiseSlide, true);
             app.NoisePanels.FreqSlider(1).ValueChangedFcn = createCallbackFcn(app, @noiseSlide, true);
             app.NoisePanels.FreqSlider(2).ValueChangedFcn = createCallbackFcn(app, @noiseSlide, true);
-            disableDefaultInteractivity(app.NoisePanels.PowerSpec);
-            disableDefaultInteractivity(app.NoisePanels.Waveforms);
-            
-            app.NoisePanels.CutNoise = uibutton(app.TabNoise, 'push');
             app.NoisePanels.CutNoise.ButtonPushedFcn = createCallbackFcn(app, @cutNoise, true);
             
+            disableDefaultInteractivity(app.NoisePanels.PowerSpec);
+            disableDefaultInteractivity(app.NoisePanels.Waveforms);
             
         end
         
