@@ -428,7 +428,7 @@ classdef SplitMerge < matlab.apps.AppBase
             app.UIFigure.Visible = 'off';
             [file,pth] = uiputfile('*.mat','SplitMerge file',app.Data.activeFile);
             svpth = [pth file];
-            if pth == 0 || file == 0
+            if isequal(pth,0) || isequal(file,0)
                 disp([9 'Cancelled, not saving.'])
             else
                 save(svpth,'spikes');
