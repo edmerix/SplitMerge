@@ -185,6 +185,7 @@ classdef SplitMerge < matlab.apps.AppBase
             app.FileTable.ValueChangedFcn = createCallbackFcn(app, @FileTableCellSelection, true);
             app.FileTable.Multiselect = 'off';
             app.FileTable.Position = [1 1 app.Settings.TreeWidth app.Settings.Height-35];
+            app.FileTable.Items = {};
 
             % Create TabGroup
             app.TabGroup = uitabgroup(app.UIFigure);
