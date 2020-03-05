@@ -12,13 +12,9 @@ function LoadDirectory(app, ~)
         [~,idx] = sort([a.datenum],'descend');
         a = a(idx);
     end
-    b = {a(:).name; a(:).date}';
-
-    app.FileTable.Data = b;
-    app.FileTable.ColumnName = {app.Data.FilePath,'Last edit time'};
-    %app.FileTable.Tooltip = {'Current directory:',app.Data.FilePath};
-    app.FileTable.ColumnWidth = {'auto',150};
+    app.FileTable.Items = {a(:).name};
     app.FileTable.FontSize = 12;
+    app.FileTable.Value = {};
 
     if ~exist([app.Data.FilePath filesep '.SplitMerge'],'dir')
         mkdir([app.Data.FilePath filesep '.SplitMerge'])

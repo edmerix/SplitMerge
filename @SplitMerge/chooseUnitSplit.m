@@ -11,5 +11,5 @@ function chooseUnitSplit(app,event)
         disp([9 'Changing split panel to unit ' num2str(app.Data.splitID)])
     end
     app.Data.modified(2) = 1;
-    refreshScreen(app);
+    app.refreshScreen();
 end

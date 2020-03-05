@@ -1,4 +1,7 @@
-function refreshScreen(app,~)
+function refreshScreen(app)
+    if max(app.Data.modified) > 0
+        app.Data.Fresh = false;
+    end
     if isfield(app.Data,'spikes')
         app.Data.colors = makeColors(app,length(unique(app.Data.spikes.assigns)));
         %refreshEditTimes(app); % update the file modification times

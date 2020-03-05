@@ -20,5 +20,5 @@ function cutNow(app,~)
     app.Data.modified = ones(1,length(app.Data.modified));
     app.Data.modifylist = [app.Data.modifylist app.Data.outlierID]; % why oh why doesn't matlab have .push()?
     app.OutlierPanels.CutButton.Enable = 'on';
-    refreshScreen(app);
+    app.refreshScreen();
 end

@@ -46,5 +46,5 @@ function splitNow(app,~)
     app.Data.modified = ones(1,length(app.Data.modified)); % one flag for each tab
     app.CommitSplit.Enable = 'on';
     
-    refreshScreen(app);
+    app.refreshScreen();
 end

@@ -11,7 +11,7 @@ function garbageCollector(app,~)
     badinds = ismember(app.Data.spikes.assigns, bad);
 
     disp([9 'Removing clusters ' strjoin(arrayfun(@(x) num2str(x),bad,'UniformOutput',false),', ')])
-    
+
     %% VERSION THAT STORES IN HIDDEN FILE:
     %{
     % write them to a file to store as garbage in .SplitMerge
@@ -20,9 +20,9 @@ function garbageCollector(app,~)
     newtrash.trials = app.Data.spikes.trials(badinds);
     newtrash.unwrapped_times = app.Data.spikes.unwrapped_times(badinds);
     newtrash.assigns = app.Data.spikes.assigns(badinds);
-    
+
     trashFile = [app.Data.FilePath filesep '.SplitMerge' filesep 'trash_' app.Data.activeFile];
-    
+
     if exist(trashFile,'file')
         old = load(trashFile,'garbage');
         garbage.waveforms = [old.garbage.waveforms; newtrash.waveforms];
@@ -80,7 +80,7 @@ function garbageCollector(app,~)
     app.GarbageButton.Enable = 'on';
 
     pushHistory(app,'t',bad);
-    
+
     app.Data.modified = ones(1,length(app.Data.modified));
-    plotUnits(app); % Same as for mergeNow function.
+    app.refreshScreen(); % Same as for mergeNow function.
 end

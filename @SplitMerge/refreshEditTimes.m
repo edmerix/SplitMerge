@@ -1,3 +1,4 @@
+% Note, no longer used, having changed file list to a uilistbox instead of uitable
 function refreshEditTimes(app,~)
     fl = dir([app.Data.FilePath filesep app.Data.activeFile]);
     if length(fl) ~= 1 && app.Settings.Debugging

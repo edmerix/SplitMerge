@@ -20,5 +20,5 @@ function mergeNow(app,~)
     app.MergeButton.Enable = 'on';
     app.GarbageButton.Enable = 'on';
     
-    refreshScreen(app);
+    app.refreshScreen();
 end

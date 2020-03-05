@@ -6,5 +6,5 @@ function markGood(app,~)
     
     setLabel(app,2); % bit silly, to wrap this function. But might come in handy later.
     app.Data.modified(1) = 1;
-    refreshScreen(app);
+    app.refreshScreen();
 end

@@ -1,6 +1,6 @@
 function plotUnits(app)
-    if app.Data.modified(1)
-        %TODO: we now store which cluster IDs have been modified in 
+    if app.Data.modified(1) || app.Data.doFirstPlot(1)
+        %TODO: we now store which cluster IDs have been modified in
         % app.Data.modifylist. We should only update those axes!
         app.Data.loader = uiprogressdlg(app.UIFigure,'Title','Please Wait',...
             'Message','Loading clusters');
@@ -52,13 +52,13 @@ function plotUnits(app)
         yl = NaN(2,length(unq)); % for scaling if app.Settings.ToScale == true
         for u = 1:length(unq)
             app.Data.loader.Message = ['Loading unit ' num2str(u) ' of ' num2str(length(unq))];
-            
+
             xpos = mod(u-1,4);
             ypos = floor((u-1)/4);
 
             app.SpikePanels{u} = uiaxes(app.UnitsPanel);
             app.SpikePanels{u}.Position = [margin+(xpos*w) (start_y-(ypos*w))-max_y w w];
-            
+
             t = (0:size(app.Data.spikes.waveforms,2)-1)/(app.Data.spikes.params.Fs/1e3);
             t = t - app.Data.spikes.params.cross_time;
 
@@ -80,7 +80,7 @@ function plotUnits(app)
             else
                 rpvCol = 'gray';
             end
-            
+
             label = app.Data.spikes.labels(app.Data.spikes.labels(:,1) == unq(u),2);
             if label == 2
                 labelCol = '0 0.6 0.2';
@@ -98,20 +98,20 @@ function plotUnits(app)
             %{
             app.SpikePanels{u}.XColor = 'none';
             yl = ylim(app.SpikePanels{u});
-            text(app.SpikePanels{u},-0.6, yl(1), [num2str(yl(1)) 'µV']);
-            text(app.SpikePanels{u},-0.6, yl(2), [num2str(yl(2)) 'µV']);
+            text(app.SpikePanels{u},-0.6, yl(1), [num2str(yl(1)) 'ï¿½V']);
+            text(app.SpikePanels{u},-0.6, yl(2), [num2str(yl(2)) 'ï¿½V']);
             %}
             xlim(app.SpikePanels{u},[t(1) t(end)]);
 
             yl(:,u) = ylim(app.SpikePanels{u});
 
             app.SelectedUnits.Items{u} = ['Unit ' num2str(unq(u))];
-            
+
             drawnow('limitrate');
-            
+
             app.Data.loader.Value = u/length(unq);
         end
-        
+
         drawnow;
 
         app.UnitsPanel.Visible = 'on';
@@ -119,7 +119,7 @@ function plotUnits(app)
         % Only really need to do this on first load...
         % NOW THAT THIS IS A FREQUENTLY CALLED ROUTINE THIS SHOULD BE SPLIT
         % OUT INTO A SEPARATE FUNCTION?
-        if app.Data.Fresh
+        if app.Data.FirstLoad
 
             % The below need repositioning or they end up slightly off.
             app.MergePanel.Position = [app.TabMerge.Position(3)-300 5 300 app.TabMerge.Position(4)-10];
@@ -149,13 +149,13 @@ function plotUnits(app)
             app.GarbageButton.Text = '';
             app.GarbageButton.Tooltip = 'Remove selected';
             app.GarbageButton.Icon = [app.Data.impath 'trash.png'];
-            
+
             app.GoodButton.Position = [app.MergePanel.Position(3)-10-40 5 40 32];
             app.GoodButton.Text = '';
             app.GoodButton.Tooltip = 'Mark selected as good';
             app.GoodButton.Icon = [app.Data.impath 'good.png'];
 
-            app.Data.Fresh = false;
+            app.Data.FirstLoad = false;
         end
 
         app.MergePanel.Visible = 'on';
@@ -167,10 +167,11 @@ function plotUnits(app)
                 set(app.SpikePanels{u},'YLim',[min(yl(:)) max(yl(:))])
             end
         end
-        
+
         app.Data.modified(1) = 0;
+        app.Data.doFirstPlot(1) = 0;
         app.Data.modifylist = [];
-        
+
         close(app.Data.loader);
         app.Data.loader = [];
     else

@@ -5,5 +5,5 @@ function chooseUnitOutlier(app,event)
         disp([9 'Changing outlier panel to unit ' num2str(app.Data.outlierID)])
     end
     app.Data.modified(3) = 1;
-    refreshScreen(app);
+    app.refreshScreen();
 end
