@@ -54,59 +54,71 @@ function splitSlide(app,event)
         app.Data.loader.Message = ['Plotting unit ' num2str(i) ' of ' num2str(length(ids))];
             
         inds = assigns == ids(i);
-        waveforms = app.Data.spikes.waveforms(inds,:);
-        [tt,wvs] = compressSpikes(app,t,waveforms);
         
         ax = uiaxes(app.SplitChaps.SplitWaves);
         ax.Position = [1 pos(i) app.SplitChaps.SplitWaves.Position(3)/3 200];
         disableDefaultInteractivity(ax);
-        
-        plot(ax, tt, wvs, 'color', colors(i,:));
-        ax.XGrid = 'on';
-        ax.YGrid = 'on';
-        ax.XLim = [min(tt) max(tt)];
-        ax.TickLength = [0 0];
-        ax.XTickLabel = [];
-        title(ax,['Unit ' num2str(ids(i))])
-        
-        % detection metric
-        ax = uiaxes(app.SplitChaps.SplitWaves);
-        ax.Position = [(app.SplitChaps.SplitWaves.Position(3)/3)+1 pos(i)+100 app.SplitChaps.SplitWaves.Position(3)/3 100];
-        disableDefaultInteractivity(ax);
-        plotDetectionCriterion(app,ax,inds);
-        ax.XLabel.String = '';
-        ax.YLabel.String = '';
-        ax.XTick = [];
-        ax.YTick = [];
-        ax.XLim = [minV 0];
-        
-        % autocorrelation
-        ax = uiaxes(app.SplitChaps.SplitWaves);
-        ax.Position = [(app.SplitChaps.SplitWaves.Position(3)/3)+1 pos(i) app.SplitChaps.SplitWaves.Position(3)/3 100];
-        disableDefaultInteractivity(ax);
-        plotAC(app,ax,inds);
-        ax.XLabel.String = '';
-        ax.YLabel.String = '';
-        ax.XTick = [];
-        ax.YTick = [];
-        
-        % amplitude & firing rate
-        ax = uiaxes(app.SplitChaps.SplitWaves);
-        ax.Position = [2*(app.SplitChaps.SplitWaves.Position(3)/3)+1 pos(i) (app.SplitChaps.SplitWaves.Position(3)/3)-2 200];
-        disableDefaultInteractivity(ax);
-        plotFR(app,ax,inds);
-        ax.XLabel.String = '';
-        ax.YLabel.String = '';
-        ax.XTick = [];
-        ax.YTick = [];
-        yyaxis(ax,'left');
-        ax.XLabel.String = '';
-        ax.YLabel.String = '';
-        ax.XTick = [];
-        ax.YTick = [];
-        
-        drawnow('limitrate');
-        app.Data.loader.Value = i/length(ids);
+            
+        if length(find(inds == 1)) < 1
+            if app.Settings.Debugging
+                disp([9 'All spikes from unit assignment ID ' num2str(ids(i)) ' have been removed'])
+            end
+            title(ax,['Unit ' num2str(ids(i)) ' no longer has any waveforms']);
+            ax.Position(3) = ax.Position(3) * 3;
+            ax.Color = 'none';
+            ax.XColor = 'none';
+            ax.YColor = 'none';
+        else
+            waveforms = app.Data.spikes.waveforms(inds,:);
+            [tt,wvs] = compressSpikes(app,t,waveforms);
+
+            plot(ax, tt, wvs, 'color', colors(i,:));
+            ax.XGrid = 'on';
+            ax.YGrid = 'on';
+            ax.XLim = [min(tt) max(tt)];
+            ax.TickLength = [0 0];
+            ax.XTickLabel = [];
+            title(ax,['Unit ' num2str(ids(i))])
+
+            % detection metric
+            ax = uiaxes(app.SplitChaps.SplitWaves);
+            ax.Position = [(app.SplitChaps.SplitWaves.Position(3)/3)+1 pos(i)+100 app.SplitChaps.SplitWaves.Position(3)/3 100];
+            disableDefaultInteractivity(ax);
+            plotDetectionCriterion(app,ax,inds);
+            ax.XLabel.String = '';
+            ax.YLabel.String = '';
+            ax.XTick = [];
+            ax.YTick = [];
+            ax.XLim = [minV 0];
+
+            % autocorrelation
+            ax = uiaxes(app.SplitChaps.SplitWaves);
+            ax.Position = [(app.SplitChaps.SplitWaves.Position(3)/3)+1 pos(i) app.SplitChaps.SplitWaves.Position(3)/3 100];
+            disableDefaultInteractivity(ax);
+            plotAC(app,ax,inds);
+            ax.XLabel.String = '';
+            ax.YLabel.String = '';
+            ax.XTick = [];
+            ax.YTick = [];
+
+            % amplitude & firing rate
+            ax = uiaxes(app.SplitChaps.SplitWaves);
+            ax.Position = [2*(app.SplitChaps.SplitWaves.Position(3)/3)+1 pos(i) (app.SplitChaps.SplitWaves.Position(3)/3)-2 200];
+            disableDefaultInteractivity(ax);
+            plotFR(app,ax,inds);
+            ax.XLabel.String = '';
+            ax.YLabel.String = '';
+            ax.XTick = [];
+            ax.YTick = [];
+            yyaxis(ax,'left');
+            ax.XLabel.String = '';
+            ax.YLabel.String = '';
+            ax.XTick = [];
+            ax.YTick = [];
+
+            drawnow('limitrate');
+            app.Data.loader.Value = i/length(ids);
+        end
     end
     drawnow(); % Maybe drawnow('limitrate','nocallbacks') %?
     app.SplitChaps.SplitWaves.Visible = 'on';
