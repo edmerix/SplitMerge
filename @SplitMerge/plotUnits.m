@@ -92,7 +92,9 @@ function plotUnits(app)
             disableDefaultInteractivity(app.SpikePanels{u});
             app.SpikePanels{u}.XGrid = 'on';
             app.SpikePanels{u}.YGrid = 'on';
-            app.SpikePanels{u}.Toolbar.Visible = 'off';
+            if isfield(app.SpikePanels{u},'Toolbar')
+                app.SpikePanels{u}.Toolbar.Visible = 'off';
+            end
 
             %app.SpikePanels{u}.ButtonDownFcn = createCallbackFcn(app, @UnitClick, true);
 
