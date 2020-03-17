@@ -1,4 +1,5 @@
 function refreshScreen(app)
+    positionComponents(app);
     if max(app.Data.modified) > 0
         app.Data.Fresh = false;
     end

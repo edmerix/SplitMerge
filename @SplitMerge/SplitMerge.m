@@ -74,6 +74,8 @@ classdef SplitMerge < matlab.apps.AppBase
     end
 
     methods (Access = private)
+        % Position the components correctly:
+        positionComponents(app);
         % Browse button pushed function
         BrowsePushed(app, ~);
         % Populate the file tree
@@ -503,7 +505,8 @@ classdef SplitMerge < matlab.apps.AppBase
 
             % Create and configure components
             createComponents(app);
-
+            %positionComponents(app);
+            
             app.ScaleCheck.Value = app.Settings.ToScale;
             app.ColorCheck.Value = app.Settings.Colorful;
 
