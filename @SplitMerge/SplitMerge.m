@@ -505,7 +505,7 @@ classdef SplitMerge < matlab.apps.AppBase
 
             % Create and configure components
             createComponents(app);
-            %positionComponents(app);
+            positionComponents(app);
             
             app.ScaleCheck.Value = app.Settings.ToScale;
             app.ColorCheck.Value = app.Settings.Colorful;
