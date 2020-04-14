@@ -9,7 +9,14 @@ function plotFR(app,ax,ids)
     cla(ax)
     %inds = ismember(app.Data.spikes.assigns,ids);
     spiketimes = sort(app.Data.spikes.spiketimes(ids));
-    tlims = [min(app.Data.spikes.spiketimes) max(app.Data.spikes.spiketimes)];% [0 sum(spikes.info.detect.dur)];  
+    if isempty(app.Settings.Epoch)
+        tlims = [min(app.Data.spikes.spiketimes) max(app.Data.spikes.spiketimes)];% [0 sum(spikes.info.detect.dur)];  
+    else
+        tlims = app.Settings.Epoch;
+        if min(spiketimes) < min(tlims) || max(spiketimes) > max(tlims)
+            uialert(app.UIFigure,'This unit has spikes outside the requested epoch time','Spikes cut off');
+        end
+    end
     num_bins  = round( diff(tlims) /  app.Data.spikes.params.display.stability_bin_size);
     edges = linspace(tlims(1),tlims(2),num_bins+1);
     n = histc(spiketimes,edges);  
@@ -26,7 +33,11 @@ function plotFR(app,ax,ids)
     set(ax,'YTick',yticks( yticks<=max(yticks)/2))
     %}
     %xlabel(ax,'Time (s)')
-    set(ax,'XTick',[]);
+    if app.Settings.ShowTime
+        set(ax,'XTick',[ceil(min(tlims)) floor(max(tlims))]);
+    else
+        set(ax,'XTick',[]);
+    end
     ylabel(ax,'Firing rate (Hz)')
 
     % Stability: (right y-axis)

@@ -464,6 +464,8 @@ classdef SplitMerge < matlab.apps.AppBase
             app.Settings.DateSort = false;
             app.Settings.SizeSort = false;
             app.Settings.Debugging = false;
+            app.Settings.Epoch = []; % If empty, time plots fit to data, else xlim is set to this (a warning is given if spikes occur beyond epoch)
+            app.Settings.ShowTime = false; % whether or not to show xticks on time plot
 
             allowable = fieldnames(app.Settings);
             if nargin > 0 && strcmpi(varargin{1},'help')
