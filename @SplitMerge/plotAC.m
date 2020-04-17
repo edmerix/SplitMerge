@@ -48,5 +48,6 @@ function plotAC(app,ax,ids)
     set(ax,'YLim',[0 ymax])
     xlabel(ax,'Time lag (ms)')
     ylabel(ax,'Autocorrelation (Hz)')
+    grid(ax,'on');
     title(ax,['\color{' rpvCol '}' num2str(rpv) ' RPV' plural ' (' num2str((rpv/length(spiketimes))*100,'%2.2f') '%)'])
 end

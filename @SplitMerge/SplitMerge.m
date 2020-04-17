@@ -499,7 +499,7 @@ classdef SplitMerge < matlab.apps.AppBase
             % set app.Data.modified to 1 to force re-plots when changing
             % tabs, or after a merge, etc. One flag for each tab.
             app.Data.modified = [0 0 0 0 0 0];
-            app.Data.modifylist = [];
+            app.Data.modifyList = [];
 
             if ~app.Settings.Debugging
                 warning('off','MATLAB:callback:error');

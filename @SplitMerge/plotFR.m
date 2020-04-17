@@ -44,8 +44,11 @@ function plotFR(app,ax,ids)
     yyaxis(ax,'right');
     cla(ax)
     memberwaves = app.Data.spikes.waveforms(ids,:);
+    assigns = app.Data.spikes.assigns(ids);
+    unq = unique(assigns);
     amp = range(memberwaves');
 
+    %{
     if isequal(app.Data.spikes.params.display.max_scatter, 'all')
         ind = 1:length(amp);
     else
@@ -53,8 +56,19 @@ function plotFR(app,ax,ids)
         max_pos = min(length(amp), app.Data.spikes.params.display.max_scatter);
         ind = choice(1:max_pos);
     end
-    l = scatter(ax,spiketimes(ind),amp(ind));
-    set(l,'Marker','.','MarkerEdgeColor',[.3 .5 .3],'MarkerEdgeAlpha',0.4,'MarkerFaceAlpha',0.5)
+    %}
+    hold(ax,'on');
+    for u = 1:length(unq)
+        sub = assigns == unq(u); % If turning on the isequal clause above, this should be: sub = assigns(ind) == unq(u);
+        col = unique(app.Data.spikes.assigns) == unq(u);
+        scatter(ax,spiketimes(sub),amp(sub),20,'filled',...
+            'MarkerEdgeColor',app.Data.colors(col,:),...
+            'MarkerEdgeAlpha',0.4,'MarkerFaceAlpha',0.5,...
+            'MarkerFaceColor',app.Data.colors(col,:));
+        set(ax,'Xlim',tlims)
+    end
+    %l = scatter(ax,spiketimes(ind),amp(ind));
+    %set(l,'Marker','.','MarkerEdgeColor',[.3 .5 .3],'MarkerEdgeAlpha',0.4,'MarkerFaceAlpha',0.5)
     set(ax,'Xlim',tlims)
     set(ax,'YLim',[0 max(amp)])
     xlabel(ax,'Time (s)')

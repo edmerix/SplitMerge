@@ -28,6 +28,7 @@ function plotDetectionCriterion(app,ax,ids)
     line(ax,[1 1]*my_sign, get(ax,'YLim'),'LineStyle','--','Color',[0 0 0],'LineWidth',2);
 
     set(ax,'XLim',sort([global_ex 0]));
+    grid(ax,'on');
 
     title(ax,['Estimated missing spikes: ' num2str(p*100,'%2.1f') '%']);
 

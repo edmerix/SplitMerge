@@ -1,7 +1,7 @@
 function plotUnits(app)
     if app.Data.modified(1) || app.Data.doFirstPlot(1)
         %TODO: we now store which cluster IDs have been modified in
-        % app.Data.modifylist. We should only update those axes!
+        % app.Data.modifyList. We should only update those axes!
         app.Data.loader = uiprogressdlg(app.UIFigure,'Title','Please Wait',...
             'Message','Loading clusters');
         % Delete all previous spike panels

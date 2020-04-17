@@ -23,6 +23,8 @@ function UnitSelection(app,event)
     end
     xlim(app.MergedWaves,[t(1) t(end)]);
     ylim(app.MergedWaves,[mn-10 mx+10])
+    app.MergedWaves.XGrid = 'on';
+    app.MergedWaves.YGrid = 'on';
     
     if ~isempty(app.Data.Selected)
         plotDetectionCriterion(app,app.MergedMissing);
