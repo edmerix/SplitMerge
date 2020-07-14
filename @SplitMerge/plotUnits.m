@@ -130,7 +130,7 @@ function plotUnits(app)
 
         app.Data.modified(1) = 0;
         app.Data.doFirstPlot(1) = 0;
-        app.Data.modifylist = [];
+        app.Data.modifyList = [];
 
         close(app.Data.loader);
         app.Data.loader = [];
