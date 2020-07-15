@@ -1,6 +1,8 @@
 # SplitMerge
 My GUI for the manual stage of spike sorting with [UltraMegaSort2000](https://github.com/danamics/UMS2K) (UMS).
 
+__UPDATE 2020-07-14__: Major overhaul of the main plot method giving a huge increase in the speed of loading units.
+
 [Screenshots below](#screenshots).
 
 This tool depends on the original UMS toolbox from the [Kleinfeld lab](https://neurophysics.ucsd.edu/software.php)
