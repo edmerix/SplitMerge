@@ -459,7 +459,7 @@ classdef SplitMerge < matlab.apps.AppBase
             app.Settings.TreeWidth = 200;
             app.Settings.Colorful = true; % whether to plot different units in different colors
             app.Settings.ToScale = false; % whether to plot all unit waveforms to the same scale
-            app.Settings.UpsampleRate = 4; % how much to upsample for FFT on spikes for noise detection
+            app.Settings.UpsampleRate = 1; % how much to upsample for FFT on spikes for noise detection
             app.Settings.nFFT = 8192;
             app.Settings.DateSort = false;
             app.Settings.SizeSort = false;
@@ -508,7 +508,7 @@ classdef SplitMerge < matlab.apps.AppBase
             % Create and configure components
             createComponents(app);
             positionComponents(app);
-            
+
             app.ScaleCheck.Value = app.Settings.ToScale;
             app.ColorCheck.Value = app.Settings.Colorful;
 
