@@ -10,5 +10,6 @@ function setLabel(app,which)
             app.Data.spikes.labels(ids(2:end),:) = [];
         end
     end
+    app.Data.modifyList = [app.Data.modifyList app.Data.Selected];
     %pushHistory(app,'l',selected,which);
 end

@@ -35,6 +35,6 @@ __Noise removal tab:__
 - [ ] Remove or document all necessary alterations to the base UMS toolbox
 - [ ] Write the help documentation!
 - [x] Add app.Data.modifylist array for future use (minimizing replots)
-- [ ] Update the replotting of the Inspect/merge panel to make use of app.Data.modifylist data and avoid full re-plot
+- [x] Update the replotting of the Inspect/merge panel to make use of app.Data.modifylist data and avoid full re-plot
 - [x] Add in confirmation of file change when alterations have been made (use app.Data.modified array?)
 - [x] Occasionally marking a unit as "good" results in multiple entries in the labels structure – update setLabel method to check for these

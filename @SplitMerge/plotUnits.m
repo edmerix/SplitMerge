@@ -4,12 +4,6 @@ function plotUnits(app)
         % app.Data.modifyList. We should only update those axes!
         app.Data.loader = uiprogressdlg(app.UIFigure,'Title','Please Wait',...
             'Message','Loading clusters');
-        % Delete all previous spike panels
-        ch = app.UnitsPanel.Children;
-        for c = 1:length(ch)
-            delete(ch);
-            app.SpikePanels = [];
-        end
 
         app.RecalcButton.Position = [app.TabMerge.Position(3)-450 app.TabMerge.Position(4)-30 145 24];
         app.AggCutoff.Position = app.RecalcButton.Position + [-120 0 -30 0];
@@ -49,64 +43,74 @@ function plotUnits(app)
 
         app.SelectedUnits.Items = {'Loading...'};
 
+        temp = cellfun(@isempty,app.SpikePanels);
+        currentlyPlotted = find(~temp);
+        clear temp
+        toDrop = setdiff(currentlyPlotted,unq); % remove panels that aren't in there
+        for t = 1:length(toDrop)
+            delete(app.SpikePanels{toDrop(t)});
+            app.SpikePanels{toDrop(t)} = [];
+        end
+
         yl = NaN(2,length(unq)); % for scaling if app.Settings.ToScale == true
         for u = 1:length(unq)
+            % if it doesn't have an axes plotted for it:
+            if length(app.SpikePanels) < unq(u) || isempty(app.SpikePanels{unq(u)})
+                app.SpikePanels{unq(u)} = uiaxes(app.UnitsPanel);
+                % a bit redundant, but may allow for compressing cell array later:
+                % (can't at present if a new unit appears with a lower UID than an old one)
+                app.SpikePanels{unq(u)}.UserData.UID = unq(u);
+                app.Data.modifyList = [app.Data.modifyList unq(u)];
+            end
+
             app.Data.loader.Message = ['Loading unit ' num2str(u) ' of ' num2str(length(unq))];
 
             xpos = mod(u-1,4);
             ypos = floor((u-1)/4);
+            app.SpikePanels{unq(u)}.Position = [margin+(xpos*w) (start_y-(ypos*w))-max_y w w];
+            if any(ismember(app.Data.modifyList,unq(u)))
+                cla(app.SpikePanels{unq(u)});
+                t = (0:size(app.Data.spikes.waveforms,2)-1)/(app.Data.spikes.params.Fs/1e3);
+                t = t - app.Data.spikes.params.cross_time;
 
-            app.SpikePanels{u} = uiaxes(app.UnitsPanel);
-            app.SpikePanels{u}.Position = [margin+(xpos*w) (start_y-(ypos*w))-max_y w w];
+                ids = app.Data.spikes.assigns == unq(u);
+                waveforms = app.Data.spikes.waveforms(ids,:);
+                [tt,wvs] = compressSpikes(app,t,waveforms);
 
-            t = (0:size(app.Data.spikes.waveforms,2)-1)/(app.Data.spikes.params.Fs/1e3);
-            t = t - app.Data.spikes.params.cross_time;
+                if app.Settings.Colorful
+                    line(app.SpikePanels{unq(u)},tt,wvs,'Color',app.Data.colors(u,:));
+                else
+                    line(app.SpikePanels{unq(u)},tt,wvs);
+                end
 
-            ids = app.Data.spikes.assigns == unq(u);
-            waveforms = app.Data.spikes.waveforms(ids,:);
-            [tt,wvs] = compressSpikes(app,t,waveforms);
+                rpv = sum(diff(app.Data.spikes.spiketimes(ids)) <= (app.Data.spikes.params.refractory_period * 0.001));
+                plural = '';
+                if rpv ~= 1, plural = 's'; end
+                if rpv/length(app.Data.spikes.spiketimes(ids)) > 0.02
+                    rpvCol = 'red';
+                else
+                    rpvCol = 'gray';
+                end
 
-            if app.Settings.Colorful
-                line(app.SpikePanels{u},tt,wvs,'Color',app.Data.colors(u,:));
-            else
-                line(app.SpikePanels{u},tt,wvs);
+                label = app.Data.spikes.labels(app.Data.spikes.labels(:,1) == unq(u),2);
+                if label == 2
+                    labelCol = '0 0.6 0.2';
+                else
+                    labelCol = '0 0 0';
+                end
+                app.SpikePanels{unq(u)}.Title.String = ['{\color[rgb]{' labelCol '}Unit ' num2str(unq(u)) '}: n = ' num2str(size(waveforms,1)) ' {\color{' rpvCol '}(' num2str(rpv) ' RPV' plural ')}'];
+
+                disableDefaultInteractivity(app.SpikePanels{unq(u)});
+                app.SpikePanels{unq(u)}.XGrid = 'on';
+                app.SpikePanels{unq(u)}.YGrid = 'on';
+                if isfield(app.SpikePanels{unq(u)},'Toolbar')
+                    app.SpikePanels{unq(u)}.Toolbar.Visible = 'off';
+                end
+
+                xlim(app.SpikePanels{unq(u)},[t(1) t(end)]);
             end
-
-            rpv = sum(diff(app.Data.spikes.spiketimes(ids)) <= (app.Data.spikes.params.refractory_period * 0.001));
-            plural = '';
-            if rpv ~= 1, plural = 's'; end
-            if rpv/length(app.Data.spikes.spiketimes(ids)) > 0.02
-                rpvCol = 'red';
-            else
-                rpvCol = 'gray';
-            end
-
-            label = app.Data.spikes.labels(app.Data.spikes.labels(:,1) == unq(u),2);
-            if label == 2
-                labelCol = '0 0.6 0.2';
-            else
-                labelCol = '0 0 0';
-            end
-            app.SpikePanels{u}.Title.String = ['{\color[rgb]{' labelCol '}Unit ' num2str(unq(u)) '}: n = ' num2str(size(waveforms,1)) ' {\color{' rpvCol '}(' num2str(rpv) ' RPV' plural ')}'];
-
-            disableDefaultInteractivity(app.SpikePanels{u});
-            app.SpikePanels{u}.XGrid = 'on';
-            app.SpikePanels{u}.YGrid = 'on';
-            if isfield(app.SpikePanels{u},'Toolbar')
-                app.SpikePanels{u}.Toolbar.Visible = 'off';
-            end
-
-            %app.SpikePanels{u}.ButtonDownFcn = createCallbackFcn(app, @UnitClick, true);
-
-            %{
-            app.SpikePanels{u}.XColor = 'none';
-            yl = ylim(app.SpikePanels{u});
-            text(app.SpikePanels{u},-0.6, yl(1), [num2str(yl(1)) '�V']);
-            text(app.SpikePanels{u},-0.6, yl(2), [num2str(yl(2)) '�V']);
-            %}
-            xlim(app.SpikePanels{u},[t(1) t(end)]);
-
-            yl(:,u) = ylim(app.SpikePanels{u});
+            % TODO: need to have a handle to the line for each panel, and update its color if needed here
+            yl(:,u) = ylim(app.SpikePanels{unq(u)});
 
             app.SelectedUnits.Items{u} = ['Unit ' num2str(unq(u))];
 
@@ -124,10 +128,18 @@ function plotUnits(app)
             % link the axes, and apply the largest ylim
             % linkaxes(app.SpikePanels,'y'); linkaxes doesn't work with UIAxes objects in r2018b...
             for u = 1:length(unq)
-                set(app.SpikePanels{u},'YLim',[min(yl(:)) max(yl(:))])
+                set(app.SpikePanels{unq(u)},'YLim',[min(yl(:)) max(yl(:))])
             end
         end
-
+        %{
+        if app.Settings.Colorful
+            for u = 1:length(unq)
+                app.SpikePanels{unq(u)}.Children(1).Color = app.Data.colors(u,:);
+            else
+                app.SpikePanels{unq(u)}.Children(1).Color = [0 0.4470 0.7410];
+            end
+        end
+        %}
         app.Data.modified(1) = 0;
         app.Data.doFirstPlot(1) = 0;
         app.Data.modifyList = [];

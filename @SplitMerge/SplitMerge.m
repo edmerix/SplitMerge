@@ -49,7 +49,7 @@ classdef SplitMerge < matlab.apps.AppBase
 
         % groups of UI items:
         SplitChaps
-        SpikePanels
+        SpikePanels     cell
         OutlierPanels
         DeetPanels
         PCAPanels
