@@ -9,7 +9,9 @@ To speed up interactivity, I'm making use of the new UIFigure and UIAxes objects
 
 It is designed to work on directories containing UMS result structs for each channel in many files, speeding up processing of large numbers of channels, such as in the Utah array.
 
-__N.B.__ This is a work in progress...  Importantly, I have made _minor_ alterations to the original toolbox, which _may_ be required for full functionality. These requirements will be removed/documented shortly (see todos below).
+It is now fully functional with an original, unmodified copy of UMS :)
+
+~~__N.B.__ This is a work in progress...  Importantly, I have made _minor_ alterations to the original toolbox, which _may_ be required for full functionality. These requirements will be removed/documented shortly (see todos below).~~
 
 _BTW_ this uses Matlab's class structure (using @ClassName directory and separate methods files within). This structure must be maintained in order for the methods to work correctly.
 
@@ -32,7 +34,7 @@ __Noise removal tab:__
 ![Screenshot of SplitMerge in Noise Removal mode](Screenshots/Noise.png?raw=true "Noise removal tab")
 
 ### Todos:
-- [ ] Remove or document all necessary alterations to the base UMS toolbox
+- [x] Remove or document all necessary alterations to the base UMS toolbox
 - [ ] Write the help documentation!
 - [x] Add app.Data.modifylist array for future use (minimizing replots)
 - [x] Update the replotting of the Inspect/merge panel to make use of app.Data.modifylist data and avoid full re-plot

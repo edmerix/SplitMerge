@@ -132,11 +132,22 @@ function plotUnits(app)
             end
         end
         %{
-        if app.Settings.Colorful
-            for u = 1:length(unq)
-                app.SpikePanels{unq(u)}.Children(1).Color = app.Data.colors(u,:);
+        % This is a bit slow, so I've temporarily disabled it ? colors can
+        be manually updated by toggling "Show colors" off and on again.
+        
+        % The color's will have become out of sync beyond the lowest
+        % modified unit, so update all plots with unit IDs above that one:
+        lowest = min(app.Data.modifyList);
+        if ~isempty(lowest)
+            updateFrom = find(unq == lowest);
+            if app.Settings.Colorful
+                for u = updateFrom:length(unq)
+                    app.SpikePanels{unq(u)}.Children(1).Color = app.Data.colors(u,:);
+                end
             else
-                app.SpikePanels{unq(u)}.Children(1).Color = [0 0.4470 0.7410];
+                for u = updateFrom:length(unq)
+                    app.SpikePanels{unq(u)}.Children(1).Color = [0 0.4470 0.7410];
+                end
             end
         end
         %}
