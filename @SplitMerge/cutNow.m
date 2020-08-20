@@ -19,12 +19,11 @@ function cutNow(app,~)
     % main vectors:
     time_transposed = false;
     unwrapped_transposed = false;
-    if iscolumn(app.Data.spikes.spiketimes) && isfield(app.Data.spikes.info,'outliers')...
-            && isrow(app.Data.spikes.info.outliers.spiketimes)
+    if iscolumn(app.Data.spikes.spiketimes)
         app.Data.spikes.spiketimes = app.Data.spikes.spiketimes';
         time_transposed = true;
     end
-    if iscolumn(app.Data.spikes.unwrapped_times) && isrow(app.Data.spikes.info.outliers.unwrapped_times)
+    if iscolumn(app.Data.spikes.unwrapped_times) %&& isrow(app.Data.spikes.info.outliers.unwrapped_times)
         app.Data.spikes.unwrapped_times = app.Data.spikes.unwrapped_times';
         unwrapped_transposed = true;
     end
