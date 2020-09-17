@@ -44,6 +44,11 @@ function plotUnits(app)
         app.SelectedUnits.Items = {'Loading...'};
         
         if app.Data.doFirstPlot(1)
+            ch = app.UnitsPanel.Children;
+            for c = 1:length(ch)
+                delete(ch);
+                app.SpikePanels = [];
+            end
             for s = 1:length(app.SpikePanels)
                 app.SpikePanels{s} = [];
             end
