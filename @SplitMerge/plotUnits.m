@@ -1,7 +1,7 @@
 function plotUnits(app)
     if app.Data.modified(1) || app.Data.doFirstPlot(1)
-        %TODO: we now store which cluster IDs have been modified in
-        % app.Data.modifyList. We should only update those axes!
+        % we now store which cluster IDs have been modified in
+        % app.Data.modifyList. So we only update those axes
         app.Data.loader = uiprogressdlg(app.UIFigure,'Title','Please Wait',...
             'Message','Loading clusters');
 
@@ -42,7 +42,13 @@ function plotUnits(app)
         if max_y > 0, max_y = 0; end % don't move anything if nothing's dropped off the bottom
 
         app.SelectedUnits.Items = {'Loading...'};
-
+        
+        if app.Data.doFirstPlot(1)
+            for s = 1:length(app.SpikePanels)
+                app.SpikePanels{s} = [];
+            end
+        end
+        
         temp = cellfun(@isempty,app.SpikePanels);
         currentlyPlotted = find(~temp);
         clear temp
