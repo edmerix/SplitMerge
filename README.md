@@ -6,7 +6,7 @@ My GUI for the manual stage of spike sorting with [UltraMegaSort2000](https://gi
 If you use this software in your work, please cite both the original UMS2000 toolbox (Hill DN, Mehta SB, Kleinfeld D. *"Quality metrics to accompany spike sorting of extracellular signals"* __J Neurosci__, 2011) and this software (Merricks EM, *"SplitMerge toolbox: a fast GUI for UltraMegaSort2000"* __DOI:10.5281/zenodo.3951171__, 2020)
 
 ## Quickstart
-Download the most recent [release](https://github.com/edmerix/SplitMerge/releases/tag/v1.0) and install the app in Matlab by opening "SplitMerge.mlappinstall". The app can now be started by clicking on its button in the "Apps" tab at the top of the Matlab main window.
+Download the most recent [release](https://github.com/edmerix/SplitMerge/releases) and install the app in Matlab by opening "SplitMerge.mlappinstall". The app can now be started by clicking on its button in the "Apps" tab at the top of the Matlab main window.
 
 Alternatively, add the source code directory to your Matlab path, and enter `SplitMerge` in the command window. `app = SplitMerge();` will enable a handle to interact with the GUI programmatically, and allows for name, value pairs of arguments to be passed to the app from the following options:
 
