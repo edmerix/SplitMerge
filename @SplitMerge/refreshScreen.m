@@ -1,7 +1,9 @@
 function refreshScreen(app)
     positionComponents(app);
     % Remove later duplicates in merge tree, if they exist:
-    app.Data.spikes.info.tree = unique(app.Data.spikes.info.tree, 'rows', 'stable');
+    if isfield(app.Data,'spikes')
+        app.Data.spikes.info.tree = unique(app.Data.spikes.info.tree, 'rows', 'stable');
+    end
     if max(app.Data.modified) > 0
         app.Data.Fresh = false;
     end
