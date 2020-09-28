@@ -27,6 +27,9 @@ Alternatively, add the source code directory to your Matlab path, and enter `Spl
 |  Debugging | Show verbose messages about functioning to command window                                                                    | false   |
 
 ## Info
+
+__UPDATE 2020-09-28__: Keyboard shortcuts! And a new figure for quick overview of waveshape similarities between multiple pairs of clusters.
+
 __UPDATE 2020-07-14__: Major overhaul of the main plot method giving a huge increase in the speed of loading units.
 
 [Screenshots below](#screenshots).
@@ -62,3 +65,6 @@ __Noise removal tab:__
 - [x] Update the replotting of the Inspect/merge panel to make use of app.Data.modifylist data and avoid full re-plot
 - [x] Add in confirmation of file change when alterations have been made (use app.Data.modified array?)
 - [x] Occasionally marking a unit as "good" results in multiple entries in the labels structure – update setLabel method to check for these
+- [ ] Update to use uigridlayout for all panels
+- [x] Add "compare pairs" figure for quick overview of waveshape similarities between multiple pairs of clusters
+- [x] Add keyboard shortcuts
