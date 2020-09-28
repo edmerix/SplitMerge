@@ -86,6 +86,8 @@ classdef SplitMerge < matlab.apps.AppBase
         LoadFile(app);
         % Resize app: (not currently being called at all because resize is turned off)
         AppResize(app,~);
+        % Handle key presses:
+        AppKeyPress(app,event);
         % make n colors:
         cols = makeColors(~,n);  % This could be a static method...
         % Plot units function: (could be renamed mergeLoad to be in keeping
@@ -121,10 +123,13 @@ classdef SplitMerge < matlab.apps.AppBase
         pushHistory(app,method,varargin); % Deactivated at present...
         % Mark selected units as "good":
         markGood(app,~);
+        % Mark selected units as "bad": (technically "unknown", just not
+        % good)
+        markBad(app,~);
         % Change split slider:
-        splitSlide(app,event);
+        splitSlide(app,event,val);
         % Change outlier slider:
-        outlierSlide(app,event);
+        outlierSlide(app,event,val);
         % Change either noise slider:
         noiseSlide(app,~);
         % Change which units are selected in the PCA plot tab:
@@ -156,6 +161,7 @@ classdef SplitMerge < matlab.apps.AppBase
             app.UIFigure.Resize = 'off'; % The figure is *mostly* capable of resizing, but it's not smooth, so I've turned it off. Set fig size when calling function.
             app.UIFigure.AutoResizeChildren = 'off';
             app.UIFigure.SizeChangedFcn = createCallbackFcn(app, @AppResize, true);
+            app.UIFigure.KeyPressFcn = createCallbackFcn(app, @AppKeyPress, true);
 
             if app.Settings.Fullscreen
                 app.UIFigure.WindowState = 'fullscreen';

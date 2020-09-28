@@ -1,5 +1,7 @@
-function outlierSlide(app,event)
-    val = event.Value;
+function outlierSlide(app,event,val)
+    if nargin < 3 || isempty(val)
+        val = event.Value;
+    end
 
     set(app.OutlierPanels.SplitLine,'XData',[val val]);
     

@@ -1,11 +1,13 @@
-function splitSlide(app,event)
+function splitSlide(app,event,val)
 
     app.Data.loader = uiprogressdlg(app.UIFigure,'Title','Plotting sub-clusters',...
         'Message','Loading');
     
     app.SplitChaps.SplitWaves.Visible = 'off';
     app.Data.splitSubclus = [];
-    val = event.Value;
+    if nargin < 3 || isempty(val)
+        val = event.Value;
+    end
 
     set(app.SplitChaps.SplitLine,'YData',[val val]);
     
