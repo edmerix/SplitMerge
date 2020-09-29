@@ -1,4 +1,7 @@
-function comparePairs(app)
+function comparePairs(app,meanPlot)
+    if nargin < 2 || isempty(meanPlot)
+        meanPlot = false;
+    end
     if length(app.Data.Selected) < 2
         uialert(app.UIFigure,'Must select at least 2 clusters to compare','Cannot show merge options');
         return;
@@ -19,7 +22,12 @@ function comparePairs(app)
     
     for a = 1:length(app.Data.Selected)-1
         wvs_a = app.Data.spikes.waveforms(app.Data.spikes.assigns == app.Data.Selected(a),:);
-        [tt_a,wvs_a] = app.compressSpikes(t,wvs_a);
+        if meanPlot
+            mnWv_a = mean(wvs_a);
+            sdWv_a = std(wvs_a);
+        else
+            [tt_a,wvs_a] = app.compressSpikes(t,wvs_a);
+        end
         ind_a = max(find(unq == app.Data.Selected(a)),1);
         
         txt = uilabel(g,'Text',{'Unit', num2str(app.Data.Selected(a))});
@@ -30,7 +38,12 @@ function comparePairs(app)
         
         for b = a+1:length(app.Data.Selected)
             wvs_b = app.Data.spikes.waveforms(app.Data.spikes.assigns == app.Data.Selected(b),:);
-            [tt_b,wvs_b] = app.compressSpikes(t,wvs_b);
+            if meanPlot
+                mnWv_b = mean(wvs_b);
+                sdWv_b = std(wvs_b);
+            else
+                [tt_b,wvs_b] = app.compressSpikes(t,wvs_b);
+            end
             ind_b = max(find(unq == app.Data.Selected(b)),1);
         
             txt = uilabel(g,'Text',['Unit ' num2str(app.Data.Selected(b))]);
@@ -43,11 +56,25 @@ function comparePairs(app)
             ax.Layout.Row = a+1;
             ax.Layout.Column = b;
             hold(ax,'on');
-            line(ax,tt_a,wvs_a,'color',app.Data.colors(ind_a,:));
-            line(ax,tt_b,wvs_b,'color',app.Data.colors(ind_b,:));
+            if meanPlot
+                xdata = [t t(end:-1:1)];
+                patch(ax,'XData',xdata,...
+                    'YData',[mnWv_a+(2*sdWv_a) mnWv_a(end:-1:1)-(2*sdWv_a(end:-1:1))],...
+                    'FaceColor',app.Data.colors(ind_a,:))
+                patch(ax,'XData',xdata,...
+                    'YData',[mnWv_b+(2*sdWv_b) mnWv_b(end:-1:1)-(2*sdWv_b(end:-1:1))],...
+                    'FaceColor',app.Data.colors(ind_b,:))
+                alpha(ax,0.6);
+                plot(ax,t,mnWv_a,'color',app.Data.colors(ind_a,:),'linewidth',2)
+                plot(ax,t,mnWv_b,'color',app.Data.colors(ind_b,:),'linewidth',2)
+            else
+                line(ax,tt_a,wvs_a,'color',app.Data.colors(ind_a,:));
+                line(ax,tt_b,wvs_b,'color',app.Data.colors(ind_b,:));
+            end
             ax.XGrid = 'on';
             ax.YGrid = 'on';
             ax.XLim = [min(t) max(t)];
+            title(ax,[num2str(app.Data.Selected(a)) ' vs. ' num2str(app.Data.Selected(b))])
             disableDefaultInteractivity(ax);
         end
     end

@@ -47,8 +47,8 @@ function AppKeyPress(app,event)
                         app.markGood();
                     case 'b' % Mark as bad (unknown technically)
                         app.markBad();
-                    case 'c' % Show compare pair plot
-                        app.comparePairs();
+                    case 'c' % Show compare pair plot (shift+c uses mean ± 2SD)
+                        app.comparePairs(any(strcmpi(event.Modifier,'shift')));
                     case 'p' % Plot PCA:
                         app.plotPCA();
                     case 'm' % Merge the selected:
