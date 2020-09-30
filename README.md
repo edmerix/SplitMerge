@@ -28,7 +28,7 @@ Alternatively, add the source code directory to your Matlab path, and enter `Spl
 
 ## Info
 
-__UPDATE 2020-09-28__: Keyboard shortcuts! And a new figure for quick overview of waveshape similarities between multiple pairs of clusters.
+__UPDATE 2020-09-28__: [Keyboard shortcuts](#keyboard-shortcuts)! And a new figure for quick overview of waveshape similarities between multiple pairs of clusters.
 
 __UPDATE 2020-07-14__: Major overhaul of the main plot method giving a huge increase in the speed of loading units.
 
@@ -57,6 +57,109 @@ __Outliers tab:__
 __Noise removal tab:__
 
 ![Screenshot of SplitMerge in Noise Removal mode](Screenshots/Noise.png?raw=true "Noise removal tab")
+
+## Keyboard shortcuts:
+
+<sub><sup>Icons: ⌃ = ctrl key, ⇧ = shift key</sup></sub>
+
+### Global shortcuts
+
+|  Key |                   Action                  | Alternate keys |
+|-----:|:-----------------------------------------:|----------------|
+|    s | Save file                                 |                |
+|   ⌃1 | Activate inspect/merge tab                | ⌃i _or_ ⌃m     |
+|   ⌃2 | Activate split tab                        | ⌃t             |
+|   ⌃3 | Activate outliers tab                     | ⌃o             |
+|   ⌃4 | Activate details tab _(empty at present)_ | ⌃d             |
+|   ⌃5 | Activate PCA tab                          | ⌃p             |
+|   ⌃6 | Activate de-noise tab                     | ⌃n             |
+|   ⌃r | Refresh screen                            |                |
+| ⌃esc | Attempt unhang                            |                |
+
+### Tab-specific shortcuts
+
+<table>
+<thead>
+  <tr>
+    <th>Tab</th>
+    <th>Key</th>
+    <th>Action</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td rowspan="7">Inspect/Merge</td>
+    <td>g</td>
+    <td>Mark selected as good</td>
+  </tr>
+  <tr>
+    <td>b</td>
+    <td>Un-mark selected as good</td>
+  </tr>
+  <tr>
+    <td>c</td>
+    <td>Compare waveforms from selected clusters</td>
+  </tr>
+  <tr>
+    <td>⇧c</td>
+    <td>Compare selected pairs with mean ± 2SD shaded plots</td>
+  </tr>
+  <tr>
+    <td>p</td>
+    <td>Plot the PCA</td>
+  </tr>
+  <tr>
+    <td>m</td>
+    <td>Merge the selected clusters</td>
+  </tr>
+  <tr>
+    <td>t</td>
+    <td>Move the selected clusters to the trash</td>
+  </tr>
+  <tr>
+    <td rowspan="5">Split</td>
+    <td>↑</td>
+    <td>Move the threshold up one value</td>
+  </tr>
+  <tr>
+    <td>⇧↑</td>
+    <td>Move the threshold up by 5% of the range</td>
+  </tr>
+  <tr>
+    <td>↓</td>
+    <td>Move the threshold down one value</td>
+  </tr>
+  <tr>
+    <td>⇧↓</td>
+    <td>Move the threshold down by 5% of the range</td>
+  </tr>
+  <tr>
+    <td>x</td>
+    <td>Execute split</td>
+  </tr>
+  <tr>
+    <td rowspan="5">Outliers</td>
+    <td>←</td>
+    <td>Move the threshold in by 1</td>
+  </tr>
+  <tr>
+    <td>⇧←</td>
+    <td>Move the threshold in by 5% of the range</td>
+  </tr>
+  <tr>
+    <td>→</td>
+    <td>Move the threshold out by 1</td>
+  </tr>
+  <tr>
+    <td>⇧→</td>
+    <td>Move the threshold out by 5% of the range</td>
+  </tr>
+  <tr>
+    <td>c</td>
+    <td>Cut waveforms</td>
+  </tr>
+</tbody>
+</table>
 
 ### Todos:
 - [x] Remove or document all necessary alterations to the base UMS toolbox
