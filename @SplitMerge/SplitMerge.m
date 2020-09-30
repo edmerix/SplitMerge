@@ -71,6 +71,8 @@ classdef SplitMerge < matlab.apps.AppBase
         breakCluster(app,id);
         % Try and recover from a frozen loading bar due to error:
         unhang(app);
+        % Fix a wonky tree:
+        pruneTree(app);
     end
 
     methods (Access = private)
