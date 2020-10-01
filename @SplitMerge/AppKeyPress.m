@@ -61,9 +61,10 @@ function AppKeyPress(app,event)
             case 'split'
                 switch event.Key
                     case 'p' % prune the tree:
-                        app.pruneTree();
-                        app.Data.doFirstPlot(2) = 1;
-                        app.refreshScreen();
+                        % Needs debugging before use.
+                        %app.pruneTree();
+                        %app.Data.doFirstPlot(2) = 1;
+                        %app.refreshScreen();
                     case 'x' % commit the split
                         app.splitNow();
                     case 'downarrow' % move the threshold down 1 value, or 5% of range if shift
