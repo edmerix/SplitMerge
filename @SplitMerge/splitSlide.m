@@ -71,6 +71,10 @@ function splitSlide(app,event,val)
             ax.XColor = 'none';
             ax.YColor = 'none';
         else
+            if length(inds) > length(app.Data.spikes.spiketimes)
+                warning('Original assignments and current ones have got out of line at some point, attempting to continue')
+            end
+            inds = inds(1:length(app.Data.spikes.spiketimes));
             waveforms = app.Data.spikes.waveforms(inds,:);
             [tt,wvs] = compressSpikes(app,t,waveforms);
 

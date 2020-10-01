@@ -1,3 +1,3 @@
 function unhang(app,~)
-close(app.Data.loader);
+delete(app.Data.loader);
 app.refreshScreen();
