@@ -117,7 +117,7 @@ __Noise removal tab:__
     <td>Move the selected clusters to the trash</td>
   </tr>
   <tr>
-    <td rowspan="5">Split</td>
+    <td rowspan="6">Split</td>
     <td>↑</td>
     <td>Move the threshold up one value</td>
   </tr>
@@ -132,6 +132,10 @@ __Noise removal tab:__
   <tr>
     <td>⇧↓</td>
     <td>Move the threshold down by 5% of the range</td>
+  </tr>
+  <tr>
+    <td>p</td>
+    <td>Prune aggregation tree</td>
   </tr>
   <tr>
     <td>x</td>
