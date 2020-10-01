@@ -114,7 +114,7 @@ function plotUnits(app)
                 disableDefaultInteractivity(app.SpikePanels{unq(u)});
                 app.SpikePanels{unq(u)}.XGrid = 'on';
                 app.SpikePanels{unq(u)}.YGrid = 'on';
-                if isfield(app.SpikePanels{unq(u)},'Toolbar')
+                if isprop(app.SpikePanels{unq(u)},'Toolbar')
                     app.SpikePanels{unq(u)}.Toolbar.Visible = 'off';
                 end
 
