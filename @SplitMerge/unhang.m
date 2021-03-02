@@ -1,3 +1,9 @@
 function unhang(app,~)
-delete(app.Data.loader);
-app.refreshScreen();
+close(app.Data.loader);
+app.MergeButton.Enable = 'on';
+app.GarbageButton.Enable = 'on';
+try
+    app.refreshScreen();
+catch
+    warning('Returned control to user but failed the automatic screen refresh')
+end
