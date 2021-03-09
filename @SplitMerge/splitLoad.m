@@ -29,7 +29,7 @@ function splitLoad(app, ~)
                 disp('Not plotting tree: no clusters have been merged in this file');
             end
         else
-            colors = makeColors(app,max(app.Data.spikes.info.tree(:)));
+            colors = makeColors(app,max(max(app.Data.spikes.info.tree(:)),64)); % limit to 64 minimum due to stragglers
 
             unq = unique(app.Data.spikes.assigns);
             app.SplitChaps.UnitSelection.Items = {'Loading...'};

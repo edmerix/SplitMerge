@@ -30,5 +30,20 @@ function UnitSelection(app,event)
         plotDetectionCriterion(app,app.MergedMissing);
         plotAC(app,app.MergedAC);
         plotFR(app,app.MergedFR);
+        wh = ismember(app.Data.spikes.labels(:,1),app.Data.Selected);
+        goodVals = app.Data.spikes.labels(wh,2);
+        if min(goodVals) > 1
+            % They're all marked as good, so make the button mark them as
+            % bad:
+            app.GoodButton.ValueChangedFcn = createCallbackFcn(app, @markBad, true);
+            app.GoodButton.Value = true;
+            app.GoodButton.Tooltip = 'Un-mark selected as good';
+        else
+            % They're either all marked as bad, or a mixture, so make the
+            % button mark them all as good:
+            app.GoodButton.ValueChangedFcn = createCallbackFcn(app, @markGood, true);
+            app.GoodButton.Value = false;
+            app.GoodButton.Tooltip = 'Mark selected as good';
+        end        
     end
 end

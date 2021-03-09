@@ -39,9 +39,10 @@ classdef SplitMerge < matlab.apps.AppBase
         MergedFR        matlab.ui.control.UIAxes
         MergeButton     matlab.ui.control.Button
         GarbageButton   matlab.ui.control.Button
-        GoodButton      matlab.ui.control.Button
+        GoodButton      matlab.ui.control.StateButton
         AggCutoff       matlab.ui.control.Spinner
         RecalcButton    matlab.ui.control.Button
+        RefreshButton   matlab.ui.control.Button
         ColorCheck      matlab.ui.control.CheckBox
         ScaleCheck      matlab.ui.control.CheckBox
         SaveButton      matlab.ui.control.Button
@@ -63,6 +64,8 @@ classdef SplitMerge < matlab.apps.AppBase
     methods (Access = public)
         % Refresh whatever tab is open:
         refreshScreen(app);
+        % Force a full refresh:
+        forceRefresh(app,~);
         % Refresh file edit times:
         refreshEditTimes(app);
         % Redo the whole spike sorting (e.g. we've removed some garbage)
@@ -256,7 +259,13 @@ classdef SplitMerge < matlab.apps.AppBase
             app.RecalcButton.Text = 'Recalculate clusters';
             app.RecalcButton.Visible = 'off';
             app.RecalcButton.ButtonPushedFcn = createCallbackFcn(app, @recalcClus, true);
-
+            
+            % Create RefreshButton
+            app.RefreshButton = uibutton(app.TabMerge,'push');
+            app.RefreshButton.Text = 'Refresh plots';
+            app.RefreshButton.Visible = 'off';
+            app.RefreshButton.ButtonPushedFcn = createCallbackFcn(app, @forceRefresh, true);
+            
             % Create scale/colorful checkboxes
             app.ScaleCheck = uicheckbox(app.TabMerge);
             app.ScaleCheck.Text = 'Maintain scale';
@@ -292,8 +301,8 @@ classdef SplitMerge < matlab.apps.AppBase
             app.MergeButton.ButtonPushedFcn = createCallbackFcn(app, @mergeNow, true);
             app.GarbageButton = uibutton(app.MergePanel, 'push');
             app.GarbageButton.ButtonPushedFcn = createCallbackFcn(app, @garbageCollector, true);
-            app.GoodButton = uibutton(app.MergePanel, 'push');
-            app.GoodButton.ButtonPushedFcn = createCallbackFcn(app, @markGood, true);
+            app.GoodButton = uibutton(app.MergePanel, 'state');
+            app.GoodButton.ValueChangedFcn = createCallbackFcn(app, @markGood, true);
 
             %% Split panel:
             app.SplitChaps.SplitTree = uiaxes(app.TabSplit);

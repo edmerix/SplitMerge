@@ -6,4 +6,5 @@ try
     app.refreshScreen();
 catch
     warning('Returned control to user but failed the automatic screen refresh')
+    close(app.Data.loader);
 end
