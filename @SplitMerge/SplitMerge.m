@@ -45,6 +45,7 @@ classdef SplitMerge < matlab.apps.AppBase
         RefreshButton   matlab.ui.control.Button
         ColorCheck      matlab.ui.control.CheckBox
         ScaleCheck      matlab.ui.control.CheckBox
+        DensityCheck    matlab.ui.control.CheckBox
         SaveButton      matlab.ui.control.Button
         CommitSplit     matlab.ui.control.Button
 
@@ -100,6 +101,8 @@ classdef SplitMerge < matlab.apps.AppBase
         plotUnits(app);
         % Compress waveforms into a single line method:
         [tt,wvs] = compressSpikes(~,t,spks); % This could be a static method...
+        % Calculate waveform densities:
+        [dens,y] = spikeHist(app,wvs);
         % Select units in the merge panel:
         UnitSelection(app,event);
         % Actually merge the selected clusters:
@@ -124,6 +127,8 @@ classdef SplitMerge < matlab.apps.AppBase
         colorCheckChg(app,~);
         % Change whether plotting to same scale or not:
         scaleCheckChg(app,~);
+        % Change whether density plots are overlaid:
+        densityCheckChg(app,~);
         % Write changes to the history file, so they can be repeated:
         pushHistory(app,method,varargin); % Deactivated at present...
         % Mark selected units as "good":
@@ -266,7 +271,7 @@ classdef SplitMerge < matlab.apps.AppBase
             app.RefreshButton.Visible = 'off';
             app.RefreshButton.ButtonPushedFcn = createCallbackFcn(app, @forceRefresh, true);
             
-            % Create scale/colorful checkboxes
+            % Create scale/colorful/density checkboxes
             app.ScaleCheck = uicheckbox(app.TabMerge);
             app.ScaleCheck.Text = 'Maintain scale';
             app.ScaleCheck.Visible = 'off';
@@ -276,6 +281,11 @@ classdef SplitMerge < matlab.apps.AppBase
             app.ColorCheck.Text = 'Colorful plots';
             app.ColorCheck.Visible = 'off';
             app.ColorCheck.ValueChangedFcn = createCallbackFcn(app, @colorCheckChg, true);
+
+            app.DensityCheck = uicheckbox(app.TabMerge);
+            app.DensityCheck.Text = 'Density overlays';
+            app.DensityCheck.Visible = 'off';
+            app.DensityCheck.ValueChangedFcn = createCallbackFcn(app, @densityCheckChg, true);
 
             % Create SelectedUnits
             app.SelectedUnits = uilistbox(app.MergePanel);
@@ -476,6 +486,8 @@ classdef SplitMerge < matlab.apps.AppBase
             app.Settings.TreeWidth = 200;
             app.Settings.Colorful = true; % whether to plot different units in different colors
             app.Settings.ToScale = false; % whether to plot all unit waveforms to the same scale
+            app.Settings.Density = false; % whether to plot the density histograms over the top of waveforms
+            app.Settings.DensityBins = 50; % number of bins to use during density plots
             app.Settings.UpsampleRate = 1; % how much to upsample for FFT on spikes for noise detection
             app.Settings.nFFT = 8192;
             app.Settings.DateSort = false;
@@ -528,6 +540,7 @@ classdef SplitMerge < matlab.apps.AppBase
 
             app.ScaleCheck.Value = app.Settings.ToScale;
             app.ColorCheck.Value = app.Settings.Colorful;
+            app.DensityCheck.Value = app.Settings.Density;
 
             % Register the app with App Designer
             registerApp(app, app.UIFigure);

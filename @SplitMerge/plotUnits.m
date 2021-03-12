@@ -11,6 +11,7 @@ function plotUnits(app)
         app.AggCutoff.Value = app.Data.spikes.params.agg_cutoff;
         app.ScaleCheck.Position = [15 app.TabMerge.Position(4)-30 100 24];
         app.ColorCheck.Position = [125 app.TabMerge.Position(4)-30 100 24];
+        app.DensityCheck.Position = [230 app.TabMerge.Position(4)-30 120 24];
 
         unq = unique(app.Data.spikes.assigns);
         plural = '';
@@ -21,6 +22,7 @@ function plotUnits(app)
 
         app.ScaleCheck.Visible = 'on';
         app.ColorCheck.Visible = 'on';
+        app.DensityCheck.Visible = 'on';
         app.UnitsPanel.Visible = 'on';
         app.RefreshButton.Visible = 'on';
         app.RecalcButton.Visible = 'on';
@@ -65,7 +67,9 @@ function plotUnits(app)
             app.SpikePanels{toDrop(t)} = [];
         end
 
-        yl = NaN(2,length(unq)); % for scaling if app.Settings.ToScale == true
+        big_padded = [min(app.Data.spikes.waveforms(:)) max(app.Data.spikes.waveforms(:))];
+        % add 5% either side:
+        big_padded = big_padded + ([-1 1]*(diff(big_padded)/20));
         for u = 1:length(unq)
             % if it doesn't have an axes plotted for it:
             if length(app.SpikePanels) < unq(u) || isempty(app.SpikePanels{unq(u)})
@@ -95,6 +99,16 @@ function plotUnits(app)
                 else
                     line(app.SpikePanels{unq(u)},tt,wvs);
                 end
+                
+                if app.Settings.Density
+                    pre_y = ylim(app.SpikePanels{unq(u)});
+                    [dens,y] = app.spikeHist(waveforms);
+                    hold(app.SpikePanels{unq(u)},'on');
+                    imagesc(app.SpikePanels{unq(u)},t,y,dens)
+                    alpha(app.SpikePanels{unq(u)},0.7);
+                    colormap(app.SpikePanels{unq(u)},'hot');
+                    ylim(app.SpikePanels{unq(u)},pre_y)
+                end
 
                 rpv = sum(diff(app.Data.spikes.spiketimes(ids)) <= (app.Data.spikes.params.refractory_period * 0.001));
                 plural = '';
@@ -123,13 +137,22 @@ function plotUnits(app)
                 xlim(app.SpikePanels{unq(u)},[t(1) t(end)]);
             end
             % TODO: need to have a handle to the line for each panel, and update its color if needed here
-            yl(:,u) = ylim(app.SpikePanels{unq(u)});
 
             app.SelectedUnits.Items{u} = ['Unit ' num2str(unq(u))];
 
             drawnow('limitrate');
 
             app.Data.loader.Value = u/length(unq);
+            
+            if app.Settings.ToScale
+                ylim(app.SpikePanels{unq(u)},big_padded);
+            else
+                these_waves = app.Data.spikes.waveforms(app.Data.spikes.assigns == unq(u),:);
+                small_padded = [min(these_waves(:)) max(these_waves(:))];
+                % add 5% either side:
+                small_padded = small_padded + ([-1 1]*(diff(small_padded)/20));
+                ylim(app.SpikePanels{unq(u)},small_padded);
+            end
         end
 
         drawnow;
@@ -137,13 +160,6 @@ function plotUnits(app)
         app.UnitsPanel.Visible = 'on';
         app.MergePanel.Visible = 'on';
 
-        if app.Settings.ToScale
-            % link the axes, and apply the largest ylim
-            % linkaxes(app.SpikePanels,'y'); linkaxes doesn't work with UIAxes objects in r2018b...
-            for u = 1:length(unq)
-                set(app.SpikePanels{unq(u)},'YLim',[min(yl(:)) max(yl(:))])
-            end
-        end
         %{
         % This is a bit slow, so I've temporarily disabled it ? colors can
         be manually updated by toggling "Show colors" off and on again.
