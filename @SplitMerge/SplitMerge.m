@@ -183,14 +183,14 @@ classdef SplitMerge < matlab.apps.AppBase
             % BrowseButton
             app.BrowseButton = uibutton(app.UIFigure, 'push');
             app.BrowseButton.ButtonPushedFcn = createCallbackFcn(app, @BrowsePushed, true);
-            app.BrowseButton.Position = [5 app.Settings.Height-30 160 25];
+            app.BrowseButton.Position = [5 app.Settings.Height-30 app.Settings.TreeWidth-40 25];
             app.BrowseButton.Text = 'New directory...';
             app.BrowseButton.Icon = [app.Data.impath 'browse.png'];
 
             % SaveButton
             app.SaveButton = uibutton(app.UIFigure, 'push');
             app.SaveButton.ButtonPushedFcn = createCallbackFcn(app, @saveSpikes, true);
-            app.SaveButton.Position = [170 app.Settings.Height-30 25 25];
+            app.SaveButton.Position = [app.Settings.TreeWidth-30 app.Settings.Height-30 25 25];
             app.SaveButton.Icon = [app.Data.impath 'save.png'];
             app.SaveButton.Text = '';
             app.SaveButton.Tooltip = 'Save (hold shift to save as)';
