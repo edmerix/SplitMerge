@@ -22,6 +22,7 @@ function recalcClus(app,~)
 
         app.Data.modified = ones(1,length(app.Data.modified));
 
-        app.refreshScreen();
+        %app.refreshScreen();
+        app.forceRefresh();
     end
 end

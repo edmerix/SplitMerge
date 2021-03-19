@@ -21,6 +21,7 @@ classdef SplitMerge < matlab.apps.AppBase
         % also, some of these can become structs of the others, e.g. a
         % group of all buttons.
         UIFigure        matlab.ui.Figure
+        UIGrid          
         FileTable       matlab.ui.control.ListBox
         MergePanel      matlab.ui.container.Panel
         BrowseButton    matlab.ui.control.Button
@@ -168,7 +169,7 @@ classdef SplitMerge < matlab.apps.AppBase
             app.UIFigure = uifigure;
             app.UIFigure.Position = [round(rand(1,1)*100) round(rand(1,1)*100) app.Settings.Width app.Settings.Height];
             app.UIFigure.Name = 'Split & Merge Tool | Emerix';
-            app.UIFigure.Resize = 'off'; % The figure is *mostly* capable of resizing, but it's not smooth, so I've turned it off. Set fig size when calling function.
+            app.UIFigure.Resize = 'on'; % The figure is *mostly* capable of resizing, but it's not smooth, so I've turned it off. Set fig size when calling function.
             app.UIFigure.AutoResizeChildren = 'off';
             app.UIFigure.SizeChangedFcn = createCallbackFcn(app, @AppResize, true);
             app.UIFigure.KeyPressFcn = createCallbackFcn(app, @AppKeyPress, true);
@@ -180,34 +181,48 @@ classdef SplitMerge < matlab.apps.AppBase
                 app.Settings.Height = ss(4);
             end
 
+            app.UIGrid = uigridlayout(app.UIFigure,[4 6]);
+            app.UIGrid.ColumnSpacing = 0;
+            app.UIGrid.RowSpacing = 0;
+            app.UIGrid.Padding = [0 0 0 0];
+            app.UIGrid.RowHeight = {5, 25, 5, '1x'};
+            app.UIGrid.ColumnWidth = {5, 165, 5, 25, 5, '1x'};
             % BrowseButton
-            app.BrowseButton = uibutton(app.UIFigure, 'push');
+            app.BrowseButton = uibutton(app.UIGrid, 'push');
             app.BrowseButton.ButtonPushedFcn = createCallbackFcn(app, @BrowsePushed, true);
-            app.BrowseButton.Position = [5 app.Settings.Height-30 app.Settings.TreeWidth-40 25];
+            %app.BrowseButton.Position = [5 app.Settings.Height-30 app.Settings.TreeWidth-40 25];
+            app.BrowseButton.Layout.Row = 2;
+            app.BrowseButton.Layout.Column = 2;
             app.BrowseButton.Text = 'New directory...';
             app.BrowseButton.Icon = [app.Data.impath 'browse.png'];
 
             % SaveButton
-            app.SaveButton = uibutton(app.UIFigure, 'push');
+            app.SaveButton = uibutton(app.UIGrid, 'push');
             app.SaveButton.ButtonPushedFcn = createCallbackFcn(app, @saveSpikes, true);
-            app.SaveButton.Position = [app.Settings.TreeWidth-30 app.Settings.Height-30 25 25];
+            %app.SaveButton.Position = [app.Settings.TreeWidth-30 app.Settings.Height-30 25 25];
+            app.SaveButton.Layout.Row = 2;
+            app.SaveButton.Layout.Column = 4;
             app.SaveButton.Icon = [app.Data.impath 'save.png'];
             app.SaveButton.Text = '';
             app.SaveButton.Tooltip = 'Save (hold shift to save as)';
 
             % Create FileTable
-            app.FileTable = uilistbox(app.UIFigure);
+            app.FileTable = uilistbox(app.UIGrid);
             %app.FileTable.ColumnName = {'Directory Contents'};
             %app.FileTable.RowName = {};
             %app.FileTable.CellSelectionCallback = createCallbackFcn(app, @FileTableCellSelection, true);
             app.FileTable.ValueChangedFcn = createCallbackFcn(app, @FileTableCellSelection, true);
             app.FileTable.Multiselect = 'off';
-            app.FileTable.Position = [1 1 app.Settings.TreeWidth app.Settings.Height-35];
+            %app.FileTable.Position = [1 1 app.Settings.TreeWidth app.Settings.Height-35];
+            app.FileTable.Layout.Row = 4;
+            app.FileTable.Layout.Column = [1 5];
             app.FileTable.Items = {};
 
             % Create TabGroup
-            app.TabGroup = uitabgroup(app.UIFigure);
-            app.TabGroup.Position = [app.Settings.TreeWidth 0 app.Settings.Width-app.Settings.TreeWidth app.Settings.Height];
+            app.TabGroup = uitabgroup(app.UIGrid);
+            %app.TabGroup.Position = [app.Settings.TreeWidth 0 app.Settings.Width-app.Settings.TreeWidth app.Settings.Height];
+            app.TabGroup.Layout.Row = [1 4];
+            app.TabGroup.Layout.Column = 6;
             app.TabGroup.SelectionChangedFcn = createCallbackFcn(app, @tabChange, true);
 
             % Create TabMerge
