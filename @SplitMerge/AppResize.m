@@ -10,4 +10,11 @@ function AppResize(app,~)
     
     app.refreshScreen();
     %}
+    % Required to update where the SpikePanels are position at present: (to
+    % be updated in future...)
+    %{
+    if strcmpi(app.TabGroup.SelectedTab.Tag,'merge')
+        app.forceRefresh();
+    end
+    %}
 end

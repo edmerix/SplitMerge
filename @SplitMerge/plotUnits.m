@@ -4,21 +4,21 @@ function plotUnits(app)
         % app.Data.modifyList. So we only update those axes
         app.Data.loader = uiprogressdlg(app.UIFigure,'Title','Please Wait',...
             'Message','Loading clusters');
-        
+        %{
         app.RefreshButton.Position = [app.TabMerge.Position(3)-405 app.TabMerge.Position(4)-30 100 24];
         app.RecalcButton.Position = app.RefreshButton.Position + [-150 0 45 0];
         app.AggCutoff.Position = app.RecalcButton.Position + [-120 0 -30 0];
-        app.AggCutoff.Value = app.Data.spikes.params.agg_cutoff;
         app.ScaleCheck.Position = [15 app.TabMerge.Position(4)-30 100 24];
         app.ColorCheck.Position = [125 app.TabMerge.Position(4)-30 100 24];
         app.DensityCheck.Position = [230 app.TabMerge.Position(4)-30 120 24];
-
+        %}
+        app.AggCutoff.Value = app.Data.spikes.params.agg_cutoff;
         unq = unique(app.Data.spikes.assigns);
         plural = '';
         if length(unq) ~= 1, plural = 's'; end
 
         app.UnitsPanel.Title = [num2str(length(unq)) ' unit' plural ':'];
-        app.UnitsPanel.Position = [5 5 app.TabMerge.Position(3)-310 app.TabMerge.Position(4)-40];
+        %app.UnitsPanel.Position = [5 5 app.TabMerge.Position(3)-310 app.TabMerge.Position(4)-40];
 
         app.ScaleCheck.Visible = 'on';
         app.ColorCheck.Visible = 'on';

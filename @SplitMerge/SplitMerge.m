@@ -83,6 +83,10 @@ classdef SplitMerge < matlab.apps.AppBase
     methods (Access = private)
         % Position the components correctly:
         positionComponents(app);
+        % Build the merge tab contents:
+        buildMergeTab(app);
+        % Build the split tab contents:
+        buildSplitTab(app);
         % Browse button pushed function
         BrowsePushed(app, ~);
         % Populate the file tree
@@ -91,7 +95,7 @@ classdef SplitMerge < matlab.apps.AppBase
         FileTableCellSelection(app, event);
         % Load the active file
         LoadFile(app);
-        % Resize app: (not currently being called at all because resize is turned off)
+        % Resize app:
         AppResize(app,~);
         % Handle key presses:
         AppKeyPress(app,event);
@@ -186,7 +190,7 @@ classdef SplitMerge < matlab.apps.AppBase
             app.UIGrid.RowSpacing = 0;
             app.UIGrid.Padding = [0 0 0 0];
             app.UIGrid.RowHeight = {5, 25, 5, '1x'};
-            app.UIGrid.ColumnWidth = {5, 165, 5, 25, 5, '1x'};
+            app.UIGrid.ColumnWidth = {5, 160, 5, 25, 5, '1x'};
             % BrowseButton
             app.BrowseButton = uibutton(app.UIGrid, 'push');
             app.BrowseButton.ButtonPushedFcn = createCallbackFcn(app, @BrowsePushed, true);
@@ -194,7 +198,7 @@ classdef SplitMerge < matlab.apps.AppBase
             app.BrowseButton.Layout.Row = 2;
             app.BrowseButton.Layout.Column = 2;
             app.BrowseButton.Text = 'New directory...';
-            app.BrowseButton.Icon = [app.Data.impath 'browse.png'];
+            app.BrowseButton.Icon = [app.Data.impath 'browse_small.png'];
 
             % SaveButton
             app.SaveButton = uibutton(app.UIGrid, 'push');
@@ -202,7 +206,7 @@ classdef SplitMerge < matlab.apps.AppBase
             %app.SaveButton.Position = [app.Settings.TreeWidth-30 app.Settings.Height-30 25 25];
             app.SaveButton.Layout.Row = 2;
             app.SaveButton.Layout.Column = 4;
-            app.SaveButton.Icon = [app.Data.impath 'save.png'];
+            app.SaveButton.Icon = [app.Data.impath 'save_small.png'];
             app.SaveButton.Text = '';
             app.SaveButton.Tooltip = 'Save (hold shift to save as)';
 
@@ -255,116 +259,9 @@ classdef SplitMerge < matlab.apps.AppBase
             app.TabNoise.Title = 'De-noise';
             app.TabNoise.Tag = 'noise';
 
-            %% Inspect/merge panel:
-            % Create MergePanel
-            app.MergePanel = uipanel(app.TabMerge);
-            app.MergePanel.Title = 'Selected cluster(s)';
-            app.MergePanel.Position = [app.TabMerge.Position(3)-300 0 300 app.TabMerge.Position(4)-25];
-            app.MergePanel.Visible = 'off';
-
-            % Create UnitsPanel
-            app.UnitsPanel = uipanel(app.TabMerge);
-            app.UnitsPanel.Title = 'Units';
-            app.UnitsPanel.Visible = 'off';
-            app.UnitsPanel.Scrollable = 'on';
-
-            % Create agg_cutoff value
-            app.AggCutoff = uispinner(app.TabMerge);
-            app.AggCutoff.ValueDisplayFormat = 'AggCutoff: %.2f';
-            app.AggCutoff.Visible = 'off';
-            app.AggCutoff.Step = 0.01;
-
-            % Create RecalcButton
-            app.RecalcButton = uibutton(app.TabMerge,'push');
-            app.RecalcButton.Text = 'Recalculate clusters';
-            app.RecalcButton.Visible = 'off';
-            app.RecalcButton.ButtonPushedFcn = createCallbackFcn(app, @recalcClus, true);
+            buildMergeTab(app);
             
-            % Create RefreshButton
-            app.RefreshButton = uibutton(app.TabMerge,'push');
-            app.RefreshButton.Text = 'Refresh plots';
-            app.RefreshButton.Visible = 'off';
-            app.RefreshButton.ButtonPushedFcn = createCallbackFcn(app, @forceRefresh, true);
-            
-            % Create scale/colorful/density checkboxes
-            app.ScaleCheck = uicheckbox(app.TabMerge);
-            app.ScaleCheck.Text = 'Maintain scale';
-            app.ScaleCheck.Visible = 'off';
-            app.ScaleCheck.ValueChangedFcn = createCallbackFcn(app, @scaleCheckChg, true);
-
-            app.ColorCheck = uicheckbox(app.TabMerge);
-            app.ColorCheck.Text = 'Colorful plots';
-            app.ColorCheck.Visible = 'off';
-            app.ColorCheck.ValueChangedFcn = createCallbackFcn(app, @colorCheckChg, true);
-
-            app.DensityCheck = uicheckbox(app.TabMerge);
-            app.DensityCheck.Text = 'Density overlays';
-            app.DensityCheck.Visible = 'off';
-            app.DensityCheck.ValueChangedFcn = createCallbackFcn(app, @densityCheckChg, true);
-
-            % Create SelectedUnits
-            app.SelectedUnits = uilistbox(app.MergePanel);
-            app.SelectedUnits.ValueChangedFcn = createCallbackFcn(app, @UnitSelection, true);
-            app.SelectedUnits.Position = [0.75*app.MergePanel.Position(3) app.MergePanel.Position(4)-220 0.24*app.MergePanel.Position(3) 200];
-            app.SelectedUnits.Multiselect = 'on';
-
-            % Create MergedWaves
-            app.MergedWaves = uiaxes(app.MergePanel);
-            disableDefaultInteractivity(app.MergedWaves);
-            % Create MergedMissing
-            app.MergedMissing = uiaxes(app.MergePanel);
-            disableDefaultInteractivity(app.MergedMissing);
-            % Create MergedAC
-            app.MergedAC = uiaxes(app.MergePanel);
-            disableDefaultInteractivity(app.MergedAC);
-            % Create MergedFR
-            app.MergedFR = uiaxes(app.MergePanel);
-            disableDefaultInteractivity(app.MergedFR);
-
-            % Create Buttons in merge panel
-            app.MergeButton = uibutton(app.MergePanel, 'push');
-            app.MergeButton.ButtonPushedFcn = createCallbackFcn(app, @mergeNow, true);
-            app.GarbageButton = uibutton(app.MergePanel, 'push');
-            app.GarbageButton.ButtonPushedFcn = createCallbackFcn(app, @garbageCollector, true);
-            app.GoodButton = uibutton(app.MergePanel, 'state');
-            app.GoodButton.ValueChangedFcn = createCallbackFcn(app, @markGood, true);
-
-            %% Split panel:
-            app.SplitChaps.SplitTree = uiaxes(app.TabSplit);
-            app.SplitChaps.SplitTree.Position = [1 app.TabSplit.Position(4)/2 2*(app.TabSplit.Position(3)/5) (app.TabSplit.Position(4)/2)-10];
-
-            app.SplitChaps.SplitSlider = uislider(app.TabSplit);
-            app.SplitChaps.SplitSlider.Orientation = 'vertical';
-            app.SplitChaps.SplitSlider.Position(1) = app.SplitChaps.SplitTree.InnerPosition(1)+app.SplitChaps.SplitTree.InnerPosition(3);
-            app.SplitChaps.SplitSlider.Position(2) = app.SplitChaps.SplitTree.InnerPosition(2);
-            app.SplitChaps.SplitSlider.Position(4) =  app.SplitChaps.SplitTree.InnerPosition(4);
-
-            app.SplitChaps.SplitSlider.ValueChangedFcn = createCallbackFcn(app, @splitSlide, true);
-            % Might do ValueChangingFcn for the above just for dragging the
-            % green line. Only apply changes on ChangedFcn not ChangingFcn.
-            disableDefaultInteractivity(app.SplitChaps.SplitTree);
-
-            app.SplitChaps.SplitWaves = uipanel(app.TabSplit);
-            app.SplitChaps.SplitWaves.Title = 'Clusters with cutoff at step -';
-            app.SplitChaps.SplitWaves.Position = [2*(app.TabSplit.Position(3)/5)+50 4 3*(app.TabSplit.Position(3)/5)-50 app.TabSplit.Position(4)-6];
-            app.SplitChaps.SplitWaves.Visible = 'on';
-            app.SplitChaps.SplitWaves.Scrollable = 'on';
-
-            app.SplitChaps.CurrentWaves = uiaxes(app.TabSplit);
-            app.SplitChaps.CurrentWaves.Position = [15 40 (2*app.TabSplit.Position(3)/5)-20 (app.TabSplit.Position(4)/2)-60];
-            disableDefaultInteractivity(app.SplitChaps.CurrentWaves);
-
-            app.SplitChaps.UnitSelection = uidropdown(app.TabSplit);
-            app.SplitChaps.UnitSelection.Position = [20 8 150 30];
-            app.SplitChaps.UnitSelection.ValueChangedFcn = createCallbackFcn(app, @chooseUnitSplit, true);
-
-            app.CommitSplit = uibutton(app.TabSplit, 'push');
-            app.CommitSplit.Position = [(2*app.TabSplit.Position(3)/5)-170 8 190 30];
-            app.CommitSplit.Text = 'Split cluster';
-            app.CommitSplit.FontWeight = 'bold';
-            %app.CommitSplit.FontColor = [0.4 0 0];
-            app.CommitSplit.Icon = [app.Data.impath 'split.png'];
-            app.CommitSplit.ButtonPushedFcn = createCallbackFcn(app, @splitNow, true);
+            buildSplitTab(app);
 
             %% Outlier tab:
             app.OutlierPanels.HistPlot = uiaxes(app.TabOutliers);
@@ -551,7 +448,7 @@ classdef SplitMerge < matlab.apps.AppBase
 
             % Create and configure components
             createComponents(app);
-            positionComponents(app);
+            %positionComponents(app); %TODO: check this is still required
 
             app.ScaleCheck.Value = app.Settings.ToScale;
             app.ColorCheck.Value = app.Settings.Colorful;

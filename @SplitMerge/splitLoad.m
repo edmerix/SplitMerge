@@ -7,19 +7,19 @@ function splitLoad(app, ~)
         ch = app.SplitChaps.SplitWaves.Children;
         delete(ch);
 
-        app.SplitChaps.SplitTree.Position = [1 app.TabSplit.Position(4)/2 2*(app.TabSplit.Position(3)/5) (app.TabSplit.Position(4)/2)-10];
+        %app.SplitChaps.SplitTree.Position = [1 app.TabSplit.Position(4)/2 2*(app.TabSplit.Position(3)/5) (app.TabSplit.Position(4)/2)-10];
         app.SplitChaps.SplitTree.XTick = [];
         app.SplitChaps.SplitTree.YTick = [];
 
-        app.SplitChaps.SplitSlider.Position(1) = app.SplitChaps.SplitTree.InnerPosition(1)+app.SplitChaps.SplitTree.InnerPosition(3);
-        app.SplitChaps.SplitSlider.Position(2) = app.SplitChaps.SplitTree.InnerPosition(2);
-        app.SplitChaps.SplitSlider.Position(4) =  app.SplitChaps.SplitTree.InnerPosition(4);
+        %app.SplitChaps.SplitSlider.Position(1) = app.SplitChaps.SplitTree.InnerPosition(1)+app.SplitChaps.SplitTree.InnerPosition(3);
+        %app.SplitChaps.SplitSlider.Position(2) = app.SplitChaps.SplitTree.InnerPosition(2);
+        %app.SplitChaps.SplitSlider.Position(4) =  app.SplitChaps.SplitTree.InnerPosition(4);
 
-        app.SplitChaps.SplitWaves.Position = [2*(app.TabSplit.Position(3)/5)+50 4 3*(app.TabSplit.Position(3)/5)-50 app.TabSplit.Position(4)-6];
+        %app.SplitChaps.SplitWaves.Position = [2*(app.TabSplit.Position(3)/5)+50 4 3*(app.TabSplit.Position(3)/5)-50 app.TabSplit.Position(4)-6];
 
-        app.SplitChaps.CurrentWaves.Position = [15 40 (2*app.TabSplit.Position(3)/5)-20 (app.TabSplit.Position(4)/2)-60];
+        %app.SplitChaps.CurrentWaves.Position = [15 40 (2*app.TabSplit.Position(3)/5)-20 (app.TabSplit.Position(4)/2)-60];
 
-        app.CommitSplit.Position = [(2*app.TabSplit.Position(3)/5)-170 8 190 30];
+        %app.CommitSplit.Position = [(2*app.TabSplit.Position(3)/5)-170 8 190 30];
 
         assigns = app.Data.spikes.info.kmeans.assigns;
         agg_block = app.Data.spikes.info.tree;
