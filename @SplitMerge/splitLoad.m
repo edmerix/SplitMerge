@@ -76,8 +76,11 @@ function splitLoad(app, ~)
             [~, tree] = draw_tree(app.SplitChaps.SplitTree, tree, 1, colors);
 
             %app.Data.tree = tree;
-
-            app.SplitChaps.SplitTree.YLim = [0 maxStep];
+            
+            % Fix the stupid misalignment thanks to the uigridlayout:
+            yl = [0 maxStep];
+            offset = 4.5/app.SplitChaps.SplitSlider.Position(4) * maxStep;
+            app.SplitChaps.SplitTree.YLim = yl + [-offset offset];
             app.SplitChaps.SplitTree.XLim = [0.5 tree.num_nodes+0.5];
             app.SplitChaps.SplitTree.XColor = 'w';
             app.SplitChaps.SplitTree.YColor = 'w';

@@ -17,4 +17,5 @@ function AppResize(app,~)
         app.forceRefresh();
     end
     %}
+    %app.Data.modified = ones(size(app.Data.modified));
 end

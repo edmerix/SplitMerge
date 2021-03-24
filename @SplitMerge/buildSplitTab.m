@@ -8,7 +8,6 @@ uigrid.Padding = [10 10 10 10];
 uigrid.RowHeight = {'1x','1x',30};
 uigrid.ColumnWidth = {'1x','1x','1x',50,'4x'};
 
-
 app.SplitChaps.SplitTree = uiaxes(uigrid);
 %app.SplitChaps.SplitTree.Position = [1 app.TabSplit.Position(4)/2 2*(app.TabSplit.Position(3)/5) (app.TabSplit.Position(4)/2)-10];
 app.SplitChaps.SplitTree.Layout.Row = 1;

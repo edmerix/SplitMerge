@@ -80,7 +80,7 @@ mergeGrid.ColumnWidth = {40,'1x',20,40};
 
 app.SelectedUnits = uilistbox(mergeGrid);
 app.SelectedUnits.ValueChangedFcn = createCallbackFcn(app, @UnitSelection, true);
-app.SelectedUnits.Position = [0.75*app.MergePanel.Position(3) app.MergePanel.Position(4)-220 0.24*app.MergePanel.Position(3) 200];
+%app.SelectedUnits.Position = [0.75*app.MergePanel.Position(3) app.MergePanel.Position(4)-220 0.24*app.MergePanel.Position(3) 200];
 app.SelectedUnits.Multiselect = 'on';
 app.SelectedUnits.Layout.Row = 1;
 app.SelectedUnits.Layout.Column = [3 4];

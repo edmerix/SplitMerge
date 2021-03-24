@@ -87,6 +87,8 @@ classdef SplitMerge < matlab.apps.AppBase
         buildMergeTab(app);
         % Build the split tab contents:
         buildSplitTab(app);
+        % Build the outliers tab contents:
+        buildOutlierTab(app);
         % Browse button pushed function
         BrowsePushed(app, ~);
         % Populate the file tree
@@ -263,51 +265,12 @@ classdef SplitMerge < matlab.apps.AppBase
             
             buildSplitTab(app);
 
-            %% Outlier tab:
-            app.OutlierPanels.HistPlot = uiaxes(app.TabOutliers);
-            app.OutlierPanels.HistPlot.Position = [10 2*app.TabOutliers.Position(4)/3 2*app.TabOutliers.Position(3)/3 (app.TabOutliers.Position(4)/3)-5];
-            disableDefaultInteractivity(app.OutlierPanels.HistPlot);
-
-            app.OutlierPanels.OutlierSlider = uislider(app.TabOutliers);
-            app.OutlierPanels.OutlierSlider.Position(1) = app.OutlierPanels.HistPlot.InnerPosition(1);
-            app.OutlierPanels.OutlierSlider.Position(2) = (2*app.TabOutliers.Position(4)/3)-3;
-            app.OutlierPanels.OutlierSlider.Position(3) = app.OutlierPanels.HistPlot.InnerPosition(3);
-            app.OutlierPanels.OutlierSlider.ValueChangedFcn = createCallbackFcn(app, @outlierSlide, true);
-
-            app.OutlierPanels.CurrentWaves = uiaxes(app.TabOutliers);
-            app.OutlierPanels.CurrentWaves.Position = [10 (app.TabOutliers.Position(4)/3)-10 (app.TabOutliers.Position(3)/3)-40 (app.TabOutliers.Position(4)/3)-35];
-            disableDefaultInteractivity(app.OutlierPanels.CurrentWaves);
-
-            app.OutlierPanels.DropWaves = uiaxes(app.TabOutliers);
-            app.OutlierPanels.DropWaves.Position = [10 10 (app.TabOutliers.Position(3)/3)-40 (app.TabOutliers.Position(4)/3)-35];
-            disableDefaultInteractivity(app.OutlierPanels.DropWaves);
-
-            app.OutlierPanels.PCA = uiaxes(app.TabOutliers);
-            app.OutlierPanels.PCA.Position = [(app.TabOutliers.Position(3)/3)-10 35 (app.TabOutliers.Position(3)/3)+40 (2*app.TabOutliers.Position(4)/3)-95];
-            disableDefaultInteractivity(app.OutlierPanels.PCA);
-
-            app.OutlierPanels.Selector = uilistbox(app.TabOutliers);
-            app.OutlierPanels.Selector.Position = [app.TabOutliers.Position(3)-170 app.TabOutliers.Position(4)-410 160 400];
-            app.OutlierPanels.Selector.ValueChangedFcn = createCallbackFcn(app, @chooseUnitOutlier, true);
-
-            app.OutlierPanels.CutButton = uibutton(app.TabOutliers, 'push');
-            app.OutlierPanels.CutButton.Position = [app.TabOutliers.Position(3)-220 30 200 30];
-            app.OutlierPanels.CutButton.Text = 'Remove outliers';
-            app.OutlierPanels.CutButton.Icon = [app.Data.impath 'cut.png'];
-            app.OutlierPanels.CutButton.ButtonPushedFcn = createCallbackFcn(app, @cutNow, true);
-
+            buildOutlierTab(app);
+            
             %% Details tab:
 
 
             %% PCA tab:
-            %{
-            app.PCAPanels.PCAView = uiaxes(app.TabPCA);
-            % Create PCASelected
-            app.PCAPanels.PCASelected = uilistbox(app.TabPCA);
-            app.PCAPanels.PCASelected.ValueChangedFcn = createCallbackFcn(app, @PCASelection, true);
-            app.PCAPanels.PCASelected.Position = [app.TabPCA.Position(3)-170 app.TabPCA.Position(4)-220 160 200];
-            app.PCAPanels.PCASelected.Multiselect = 'on';
-            %}
             app.PCAPanels.PCBtn = uibutton(app.TabPCA, 'push');
             app.PCAPanels.PCBtn.Position = app.TabPCA.Position; % lols.
             app.PCAPanels.PCBtn.Text = {'Within-app PCA plot de-activated due to lagginess','Click anywhere to show PCA plot in a separate window'};

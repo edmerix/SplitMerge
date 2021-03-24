@@ -1,16 +1,7 @@
 function outlierLoad(app,~)
     if app.Data.modified(3) || app.Data.doFirstPlot(3)
-        app.OutlierPanels.HistPlot.Position = [20 2*app.TabOutliers.Position(4)/3 2*app.TabOutliers.Position(3)/3 (app.TabOutliers.Position(4)/3)-5];
         app.OutlierPanels.HistPlot.YTickLabel = [];
         app.OutlierPanels.HistPlot.XTickLabel = [];
-        app.OutlierPanels.OutlierSlider.Position(1) = app.OutlierPanels.HistPlot.InnerPosition(1);
-        app.OutlierPanels.OutlierSlider.Position(2) = (2*app.TabOutliers.Position(4)/3)-3;
-        app.OutlierPanels.OutlierSlider.Position(3) = app.OutlierPanels.HistPlot.InnerPosition(3);
-        app.OutlierPanels.CurrentWaves.Position = [20 (app.TabOutliers.Position(4)/3)-10 (app.TabOutliers.Position(3)/3)-40 (app.TabOutliers.Position(4)/3)-35];
-        app.OutlierPanels.DropWaves.Position = [20 10 (app.TabOutliers.Position(3)/3)-40 (app.TabOutliers.Position(4)/3)-35];
-        app.OutlierPanels.PCA.Position = [(app.TabOutliers.Position(3)/3)-10 35 (app.TabOutliers.Position(3)/3)+40 (2*app.TabOutliers.Position(4)/3)-95];
-        app.OutlierPanels.Selector.Position = [app.TabOutliers.Position(3)-170 app.TabOutliers.Position(4)-410 160 400];
-        app.OutlierPanels.CutButton.Position = [app.TabOutliers.Position(3)-220 30 200 30];
 
         cla(app.OutlierPanels.HistPlot);
 
@@ -55,16 +46,15 @@ function outlierLoad(app,~)
             hold(app.OutlierPanels.HistPlot,'off');
             title(app.OutlierPanels.HistPlot,['Unit ' num2str(app.Data.outlierID)]);
         end
-
-        maxZ = app.OutlierPanels.HistPlot.XLim(2);
+        
+        maxZ = ceil(max(z));
+        minZ = 0;
 
         app.OutlierPanels.SplitLine = line(app.OutlierPanels.HistPlot,...
             [maxZ maxZ],app.OutlierPanels.HistPlot.YLim,'color','r',...
             'linewidth',2,'linestyle','--');
 
-        app.OutlierPanels.OutlierSlider.Limits = app.OutlierPanels.HistPlot.XLim;
-        app.OutlierPanels.OutlierSlider.MajorTicks = app.OutlierPanels.HistPlot.XTick;
-        app.OutlierPanels.OutlierSlider.MinorTicks = [];
+        app.OutlierPanels.OutlierSlider.Limits = [minZ maxZ];
         app.OutlierPanels.OutlierSlider.Value = maxZ;
         app.OutlierPanels.HistPlot.TickLength = [0 0];
 
@@ -83,7 +73,18 @@ function outlierLoad(app,~)
         grid(app.OutlierPanels.CurrentWaves,'on');
         grid(app.OutlierPanels.DropWaves,'on');
         grid(app.OutlierPanels.PCA,'on');
-
+        
+        % Fix the misalignment thanks to uigridlayout not allowing any
+        % internal position adjustments: (why no padding/margin values
+        % within single elements?!)
+        xl = app.OutlierPanels.OutlierSlider.Limits;
+        offset = app.OutlierPanels.OutlierSlider.Position(1) - app.OutlierPanels.HistPlot.Position(1);
+        offsetNorm = offset/app.OutlierPanels.HistPlot.Position(3) * app.OutlierPanels.OutlierSlider.Limits(2);
+        app.OutlierPanels.HistPlot.XLim = xl + [-offsetNorm offsetNorm];
+        app.OutlierPanels.OutlierSlider.MajorTicks = app.OutlierPanels.HistPlot.XTick;
+        app.OutlierPanels.OutlierSlider.MinorTicks = [];
+        app.OutlierPanels.SplitLine.YData = app.OutlierPanels.HistPlot.YLim;
+        
         title(app.OutlierPanels.PCA,[num2str(length(z)) ' spikes'])
         app.Data.modified(3) = 0;
         app.Data.doFirstPlot(3) = 0;
