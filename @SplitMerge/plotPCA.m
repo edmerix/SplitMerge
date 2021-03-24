@@ -2,7 +2,7 @@ function plotPCA(app,~)
     pc = app.Data.spikes.info.pca.u;
     unq = unique(app.Data.spikes.assigns);
     hfig = figure('Position',[100 100 800 700]);
-    ax = axes('Position',[0.05 0.05 0.9 0.9]);
+    ax = axes('Position',[0.1 0.05 0.9 0.9]);
     hold(ax,'on');
     group = zeros(1,length(unq));
     unit = compose('Unit %d',unq);
@@ -20,12 +20,15 @@ function plotPCA(app,~)
     ax.ZGrid = 'on';
     rotate3d(ax,'on')
     legend(ax,group,unit,'Location','NorthEastOutside');
-
+    view(3)
+    set(ax,'box','off','tickdir','out','ticklength',[0.005 0.005],...
+        'linewidth',1.5,'FontSize',16,'color','none','FontName','Helvetica Neue',...
+        'xcolor','k','ycolor','k');
     dcm_obj = datacursormode(hfig);
-    set(dcm_obj,'UpdateFcn',@myupdatefcn)    
+    set(dcm_obj,'UpdateFcn',@updateDots)    
 end
 
-function txt = myupdatefcn(~,event_obj)
+function txt = updateDots(~,event_obj)
     % Customizes text of data tips
     all_u = get(gca,'Children');
     for a = 1:length(all_u)

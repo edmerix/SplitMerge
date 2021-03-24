@@ -89,6 +89,8 @@ classdef SplitMerge < matlab.apps.AppBase
         buildSplitTab(app);
         % Build the outliers tab contents:
         buildOutlierTab(app);
+        % Build the PCA tab contents:
+        buildPCAtab(app);
         % Browse button pushed function
         BrowsePushed(app, ~);
         % Populate the file tree
@@ -163,6 +165,10 @@ classdef SplitMerge < matlab.apps.AppBase
         pcaLoad(app,~);
         % Plot PCA in separate window:
         plotPCA(app,~);
+        % Plot PCA through time in separate window:
+        pcaTimeSlider(app,~);
+        % Plot full PCA projection in separate window:
+        pcaFullPlot(app,~);
         % Load the de-noise tab:
         noiseLoad(app,~);
     end
@@ -267,14 +273,8 @@ classdef SplitMerge < matlab.apps.AppBase
 
             buildOutlierTab(app);
             
+            buildPCAtab(app);
             %% Details tab:
-
-
-            %% PCA tab:
-            app.PCAPanels.PCBtn = uibutton(app.TabPCA, 'push');
-            app.PCAPanels.PCBtn.Position = app.TabPCA.Position; % lols.
-            app.PCAPanels.PCBtn.Text = {'Within-app PCA plot de-activated due to lagginess','Click anywhere to show PCA plot in a separate window'};
-            app.PCAPanels.PCBtn.ButtonPushedFcn = createCallbackFcn(app, @plotPCA, true);
 
             %% Noise tab:
             app.NoisePanels.PowerSpec = uiaxes(app.TabNoise);
