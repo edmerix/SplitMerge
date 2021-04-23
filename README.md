@@ -1,5 +1,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3951171.svg)](https://doi.org/10.5281/zenodo.3951171)
 
+### _Note: MatLab ≥ r2020a occasionally breaks button positioning on small screens — the branch at [GridLayout](https://github.com/edmerix/SplitMerge/tree/GridLayout) implements full resizable elements and fixes that issue, however it has undergone limited testing as of Apr 2021_
+
 # SplitMerge
 My GUI for the manual stage of spike sorting with [UltraMegaSort2000](https://github.com/danamics/UMS2K) (UMS).
 
