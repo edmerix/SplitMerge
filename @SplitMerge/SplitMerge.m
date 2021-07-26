@@ -1,6 +1,6 @@
 classdef SplitMerge < matlab.apps.AppBase
     % SplitMerge class/figure.
-    % A better GUI for review/tweaking of ultramegasort 2000 data, making
+    % A faster GUI for review/tweaking of ultramegasort 2000 data, making
     % use of UIFigure, UIAxes, etc.
     %
     % NOTE: due to its use of Scrollable panels (plus some other features),

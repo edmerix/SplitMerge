@@ -6,7 +6,7 @@ function pcaFullPlot(app,~)
 % E M Merricks 2015
 spikes = app.Data.spikes;
 unq = unique(spikes.assigns);
-cols = distinguishable_colors(length(unq));
+cols = app.makeColors(length(unq));
 
 d = diag(spikes.info.pca.s);
 r = find( cumsum(d)/sum(d) >.95,1);
