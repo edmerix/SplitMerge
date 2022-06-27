@@ -52,9 +52,18 @@ function AppKeyPress(app,event)
                     case 'p' % Plot PCA:
                         app.plotPCA();
                     case 'm' % Merge the selected:
-                        app.MergeNow();
+                        app.mergeNow();
                     case 't' % move to trash:
                         app.garbageCollector();
+                    case 'x' % mark as a multi-unit:
+                        disp([9 'Marking selected as multi-unit'])
+                        app.setLabel(3);
+                    case 'r' % needs outlier removal:
+                        disp([9 'Marking selected as needing outlier removal'])
+                        app.setLabel(5);
+                    case '%' % high percentage missing:
+                        disp([9 'Marking selected as high percentage missing'])
+                        app.setLabel(6);
                     otherwise
                         %
                 end

@@ -120,10 +120,19 @@ function plotUnits(app)
                 end
 
                 label = app.Data.spikes.labels(app.Data.spikes.labels(:,1) == unq(u),2);
-                if label == 2
-                    labelCol = '0 0.6 0.2';
-                else
-                    labelCol = '0 0 0';
+                switch label 
+                    case 2
+                        labelCol = '0 0.6 0.2';
+                    case 3
+                        labelCol = '0.3 0.3 0.8';
+                    case 4
+                        labelCol = '0.8 0.3 0.3';
+                    case 5
+                        labelCol = '0.7 0.7 0.3';
+                    case 6
+                        labelCol = '0.086275 0.32157 0.51765';
+                    otherwise
+                        labelCol = '0 0 0';
                 end
                 app.SpikePanels{unq(u)}.Title.String = ['{\color[rgb]{' labelCol '}Unit ' num2str(unq(u)) '}: n = ' num2str(size(waveforms,1)) ' {\color{' rpvCol '}(' num2str(rpv) ' RPV' plural ')}'];
 
