@@ -43,9 +43,9 @@ function AppKeyPress(app,event)
         switch app.TabGroup.SelectedTab.Tag
             case 'merge'
                 switch event.Key
-                    case 'g' % Mark as good
+                    case {'g','2'} % Mark as good
                         app.markGood();
-                    case 'b' % Mark as bad (unknown technically)
+                    case {'b','1'} % Mark as bad (unknown technically)
                         app.markBad();
                     case 'c' % Show compare pair plot (shift+c uses mean ± 2SD)
                         app.comparePairs(any(strcmpi(event.Modifier,'shift')));
@@ -53,15 +53,15 @@ function AppKeyPress(app,event)
                         app.plotPCA();
                     case 'm' % Merge the selected:
                         app.mergeNow();
-                    case 't' % move to trash:
+                    case {'t','4'} % move to trash:
                         app.garbageCollector();
-                    case 'x' % mark as a multi-unit:
+                    case {'x','3'} % mark as a multi-unit:
                         disp([9 'Marking selected as multi-unit'])
                         app.setLabel(3);
-                    case 'r' % needs outlier removal:
+                    case {'r','5'} % needs outlier removal:
                         disp([9 'Marking selected as needing outlier removal'])
                         app.setLabel(5);
-                    case '%' % high percentage missing:
+                    case {'h','6'} % high percentage missing:
                         disp([9 'Marking selected as high percentage missing'])
                         app.setLabel(6);
                     otherwise

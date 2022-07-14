@@ -120,6 +120,10 @@ function plotUnits(app)
                 end
 
                 label = app.Data.spikes.labels(app.Data.spikes.labels(:,1) == unq(u),2);
+                if length(label) > 1
+                    label = max(label); % assume the highest was latest, as this is usually uneditd (1) or not (> 1), and user can update
+                    warning(['There was more than 1 label for unit ' num2str(unq(u)) ', taking highest'])
+                end
                 switch label 
                     case 2
                         labelCol = '0 0.6 0.2';

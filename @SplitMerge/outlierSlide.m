@@ -6,7 +6,7 @@ function outlierSlide(app,event,val)
     xl = app.OutlierPanels.OutlierSlider.Limits;
     offset = app.OutlierPanels.OutlierSlider.Position(1) - app.OutlierPanels.HistPlot.Position(1);
     offsetNorm = offset/app.OutlierPanels.HistPlot.Position(3) * app.OutlierPanels.OutlierSlider.Limits(2);
-    app.OutlierPanels.HistPlot.XLim = xl + [-offsetNorm offsetNorm];
+    app.OutlierPanels.HistPlot.XLim = sort(xl + [-offsetNorm offsetNorm]);
     
     app.OutlierPanels.SplitLine.XData = [val val];
     app.OutlierPanels.SplitLine.YData = app.OutlierPanels.HistPlot.YLim;
