@@ -52,13 +52,26 @@ function garbageCollector(app,~)
     newtrash.trials = app.Data.spikes.trials(badinds);
     newtrash.unwrapped_times = app.Data.spikes.unwrapped_times(badinds);
     newtrash.assigns = app.Data.spikes.assigns(badinds);
+    
     if isfield(app.Data.spikes,'garbage')
         old = app.Data.spikes.garbage;
         garbage.waveforms = [old.waveforms; newtrash.waveforms];
+        flds = {'spiketimes','trials','unwrapped_times','assigns'};
+        for f = 1:length(flds)
+            if iscolumn(old.(flds{f}))
+                old.(flds{f}) = old.(flds{f})';
+            end
+            if iscolumn(newtrash.(flds{f}))
+                newtrash.(flds{f}) = newtrash.(flds{f})';
+            end
+            garbage.(flds{f}) = [old.(flds{f}) newtrash.(flds{f})];
+        end
+        %{
         garbage.spiketimes = [old.spiketimes; newtrash.spiketimes];
         garbage.trials = [old.trials newtrash.trials];
         garbage.unwrapped_times = [old.unwrapped_times; newtrash.unwrapped_times];
         garbage.assigns = [old.assigns newtrash.assigns];
+        %}
         clear old
     else
         garbage = newtrash;
